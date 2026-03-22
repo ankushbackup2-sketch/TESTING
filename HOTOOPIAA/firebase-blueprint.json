@@ -1,0 +1,25 @@
+{
+  "entities": {
+    "StudyMaterial": {
+      "title": "StudyMaterial",
+      "description": "Represents a study material item.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier." },
+        "name": { "type": "string", "description": "Name of the material." },
+        "category": { "type": "string", "description": "Category of the material." },
+        "link": { "type": "string", "description": "Link to the material." },
+        "class": { "type": "string", "description": "Class level." },
+        "board": { "type": "string", "description": "Board." },
+        "subject": { "type": "string", "description": "Subject." }
+      },
+      "required": ["id", "name", "link"]
+    }
+  },
+  "firestore": {
+    "/studyMaterials/{materialId}": {
+      "schema": { "$ref": "StudyMaterial" },
+      "description": "Collection of study materials."
+    }
+  }
+}

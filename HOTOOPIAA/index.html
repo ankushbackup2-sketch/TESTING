@@ -1,0 +1,3779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotoopia | Learn Smarter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deepest: #0A1628;
+            --bg-dark: #0F2041;
+            --bg-panel: #0B1A35;
+            --border: #1A3A6B;
+            --accent-blue: #2B9FE6;
+            --bright-blue: #63B3ED;
+            --pale-blue: #BEE3F8;
+            --text-primary: #BEE3F8;
+            --text-muted: #63B3ED;
+            --text-dim: #90B4D8;
+            --gold: #F59E0B;
+            --purple: #7C3AED;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            background-color: #252654;
+            background-image: 
+                radial-gradient(circle at 0% 100%, #c4e8f5 0%, transparent 60%),
+                radial-gradient(circle at 100% 100%, #ebd9eb 0%, transparent 60%),
+                radial-gradient(circle at 100% 0%, #685a82 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, #3e4a82 0%, transparent 80%);
+            background-attachment: fixed;
+            background-size: cover;
+            color: var(--text-primary);
+            font-family: 'Nunito', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom owl cursor */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Disney Background (Twinkling Stars) */
+        #starfield {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 4px #fff, 0 0 8px var(--pale-blue);
+            animation: twinkle linear infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Cinematic Intro */
+        #intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-in-out;
+        }
+        #intro-content {
+            position: relative;
+            z-index: 2;
+        }
+        #glitter-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .glitter-particle {
+            position: absolute;
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: explode 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes explode {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0); opacity: 0; }
+        }
+
+        /* Sparkle Animation for Eyes */
+        @keyframes popSparkle {
+            0% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.5) rotate(90deg); }
+            100% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+
+        /* Student Profile Section */
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 30px;
+            background: rgba(43, 159, 230, 0.1);
+            border: 1px solid rgba(43, 159, 230, 0.2);
+            transition: all 0.3s ease;
+        }
+        .profile-container:hover {
+            background: rgba(43, 159, 230, 0.2);
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            object-fit: cover;
+        }
+        .profile-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        .hotoopian-badge {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Study Material Download Button (Unlocked) */
+        .sm-btn-download {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #F59E0B, #FBBF24);
+            color: #000;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+        .sm-btn-download:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+        }
+
+        /* Study Material Login Button (Locked) */
+        .sm-btn-login {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(15, 32, 65, 0.6);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .sm-btn-login:hover {
+            background: rgba(43, 159, 230, 0.1);
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(10, 22, 40, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10005;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-owl {
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            animation: floatOwl 4s ease-in-out infinite;
+        }
+        @keyframes floatOwl {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-3px) rotate(-2deg); }
+            50% { transform: translateY(-6px) rotate(0deg); }
+            75% { transform: translateY(-3px) rotate(2deg); }
+        }
+        .logo {
+            font-family: 'Chewy', system-ui, cursive;
+            font-size: 2.8rem;
+            margin: 0;
+            letter-spacing: 2px;
+            color: var(--pale-blue);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            animation: logoFloat 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        .since-text {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-left: 10px;
+            margin-top: 18px;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-3px) rotate(-1deg); }
+            66% { transform: translateY(-1px) rotate(1deg); }
+        }
+        .nav-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end;}
+        
+        /* Magic Glass Buttons */
+        .magic-btn {
+            background: rgba(43, 159, 230, 0.1);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: none; /* Let custom cursor handle it */
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .magic-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s ease;
+        }
+        .magic-btn:hover {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(245, 158, 11, 0.4);
+            text-shadow: 0 0 5px var(--gold);
+            transform: translateY(-3px);
+            background: rgba(43, 159, 230, 0.2);
+        }
+        .magic-btn:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Peeking Owl for Back Button */
+        .btn-peeking-owl {
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%) scale(0);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .btn-back:hover .btn-peeking-owl {
+            transform: translateY(-50%) scale(1) rotate(-15deg);
+            opacity: 1;
+            left: -15px;
+        }
+
+        .fade-out-transition {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 0;
+            width: 100%;
+            min-height: calc(100vh - 160px);
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* HOME PAGE STYLES */
+        #home-page {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+        #home-page p {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+
+        #study-material-list {
+            width: 100%;
+            background-color: #fdfdfd;
+            background-image: linear-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 100% 40px;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 40px;
+        }
+        .sm-content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        #stationery-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .stationery-icon {
+            position: absolute;
+            opacity: 0.15;
+        }
+        #study-material-list .sm-header {
+            background: rgba(253, 253, 253, 0.9);
+            border-bottom: 1px solid #ccc;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        #study-material-list h1 {
+            color: #333 !important;
+            margin-top: 10px !important;
+        }
+        #study-material-list > *:not(.sm-header):not(#stationery-container) {
+            position: relative;
+            z-index: 1;
+        }
+        #sm-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        #filter-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: -30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .sm-filter-select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #333;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        /* PAID COURSES STYLES */
+        .pc-header {
+            padding: 30px 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            background: rgba(10, 22, 40, 0.9); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 58, 107, 0.5); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .pc-filters {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        .pc-filter-btn {
+            background: rgba(15, 32, 65, 0.6);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .pc-filter-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+        .pc-filter-btn.active {
+            background: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(43, 159, 230, 0.4);
+        }
+        .course-category-tag {
+            display: inline-block;
+            background: rgba(43, 159, 230, 0.1);
+            color: var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .popular-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: pulse-gold 2s infinite;
+        }
+        @keyframes pulse-gold {
+            0% { transform: scale(1); box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 4px 20px rgba(245, 158, 11, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); }
+        }
+        .course-highlights {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .course-highlights li {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .course-highlights li::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .pc-content {
+            padding: 100px 20px 60px; 
+            max-width: 1200px; 
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            overflow-y: auto;
+            max-height: calc(100vh - 160px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-blue) transparent;
+            scroll-behavior: smooth;
+            overscroll-behavior: contain;
+            /* Ensure scrollbar is on the right */
+            scrollbar-gutter: stable;
+        }
+        .pc-content::-webkit-scrollbar {
+            width: 6px;
+            position: absolute;
+            right: 0;
+        }
+        .pc-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .pc-content::-webkit-scrollbar-thumb {
+            background: var(--accent-blue);
+            border-radius: 10px;
+        }
+        #course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            justify-items: center;
+        }
+        @media (max-width: 1024px) {
+            #course-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        }
+        .course-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .course-card.popular-card {
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+            animation: cardPulse 2s infinite;
+        }
+        @keyframes cardPulse {
+            0% { box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 15px 50px rgba(245, 158, 11, 0.6); }
+            100% { box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4); }
+        }
+        .course-thumb {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+        .course-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .course-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .course-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-share, .btn-copy {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--text-muted);
+        }
+        .btn-share:hover, .btn-copy:hover {
+            background: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-blue);
+        }
+        .btn-enroll {
+            margin-top: 15px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, #FF9933, #FFD700);
+            color: #000;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .btn-enroll::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.6),
+                transparent
+            );
+            animation: sweep 3s infinite;
+        }
+        @keyframes sweep {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+        .btn-enroll:hover {
+            transform: scale(1.02);
+        }
+        .razorpay-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        .razorpay-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #4ade80;
+            animation: badgePulse 1.5s infinite;
+        }
+        @keyframes badgePulse {
+            0% { transform: scale(1); box-shadow: 0 0 5px #4ade80; }
+            50% { transform: scale(1.2); box-shadow: 0 0 15px var(--gold); }
+            100% { transform: scale(1); box-shadow: 0 0 5px #4ade80; }
+        }
+        
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 60px;
+        }
+        .reviews-title {
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 40px;
+        }
+        .reviews-slider {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold) var(--bg-dark);
+        }
+        .reviews-slider::-webkit-scrollbar {
+            height: 6px;
+        }
+        .reviews-slider::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+            border-radius: 10px;
+        }
+        .reviews-slider::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 10px;
+        }
+        .review-card {
+            min-width: 300px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            scroll-snap-align: start;
+            position: relative;
+        }
+        /* Disney-style quote bubble tail */
+        .review-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            width: 20px;
+            height: 20px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            transform: rotate(45deg);
+        }
+        .review-stars {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .review-text {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .review-author {
+            font-weight: 700;
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+        }
+        
+        /* Empty State */
+        .pc-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .pc-empty-state svg {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+        .pc-empty-state h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        .pc-empty-state p {
+            color: var(--text-muted);
+            max-width: 400px;
+            line-height: 1.6;
+        }
+        h1.welcome-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(to right, #ffffff, #63B3ED, #BEE3F8, #ffffff);
+            background-size: 200% auto;
+            color: #ffffff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 4s linear infinite, fadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            text-shadow: 0 10px 30px rgba(43, 159, 230, 0.3);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .board-badge {
+            font-size: 1rem;
+            color: #FFFFFF;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            background: linear-gradient(135deg, #2B9FE6, #1E40AF);
+            padding: 12px 28px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            box-shadow: 0 10px 25px rgba(43, 159, 230, 0.4), 0 0 20px rgba(43, 159, 230, 0.2);
+            text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            animation: badgePulse 3s infinite ease-in-out;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 25px rgba(43, 159, 230, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 15px 35px rgba(43, 159, 230, 0.6), 0 0 30px rgba(43, 159, 230, 0.3); }
+        }
+
+        .board-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.6s ease;
+            pointer-events: none;
+        }
+
+        .board-badge:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(43, 159, 230, 0.5), 0 0 20px rgba(43, 159, 230, 0.3);
+            border-color: #FFFFFF;
+            background: linear-gradient(135deg, #3B82F6, var(--accent-blue));
+        }
+
+        .board-badge:hover::before {
+            transform: scale(1);
+        }
+
+        .board-badge:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px;
+            background: rgba(15, 32, 65, 0.9);
+            text-align: center;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
+        }
+        .social-links { 
+            display: flex; 
+            justify-content: center; 
+            gap: 20px; 
+            margin-top: 20px; 
+            flex-wrap: wrap;
+        }
+        .social-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: none;
+        }
+        .social-links a:hover {
+            background: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(43, 159, 230, 0.4);
+            border-color: var(--accent-blue);
+        }
+
+        /* Doodles */
+        .doodle {
+            position: fixed;
+            width: 80px; height: 80px;
+            opacity: 0.15;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+        }
+        .doodle-tl { top: 120px; left: 5%; animation-delay: 0s; }
+        .doodle-tr { top: 120px; right: 5%; animation-delay: 1.5s; }
+        .doodle-bl { bottom: 120px; left: 5%; animation-delay: 3s; }
+        .doodle-br { bottom: 120px; right: 5%; animation-delay: 4.5s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* =========================================
+           OWL CURSOR & GLITTER TRAIL STYLES
+           ========================================= */
+        #owl-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 40px; height: 40px;
+            pointer-events: none;
+            z-index: 10000;
+            /* We use transform in JS for positioning */
+            will-change: transform;
+            transition: opacity 0.3s ease;
+        }
+        
+        @keyframes hootieBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        .owl-eyes {
+            animation: hootieBlink 4s infinite;
+        }
+
+        /* Happy Bounce / Spin on Hover */
+        @keyframes happyBounce {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.3) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        .cursor-hover svg {
+            animation: happyBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Flapping Wings Animation */
+        .wing-left { transform-origin: 25px 65px; }
+        .wing-right { transform-origin: 95px 65px; }
+        
+        @keyframes joyfulFlapLeft {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(-35deg); }
+            90% { transform: rotate(5deg); }
+        }
+        @keyframes joyfulFlapRight {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(35deg); }
+            90% { transform: rotate(-5deg); }
+        }
+        
+        .header-owl .wing-left { animation: joyfulFlapLeft 5s infinite; transform-origin: 30px 70px; }
+        .header-owl .wing-right { animation: joyfulFlapRight 5s infinite; transform-origin: 90px 70px; }
+        
+        @keyframes joyfulBeak {
+            0%, 80%, 100% { transform: scale(1); }
+            85%, 95% { transform: scale(1.1); }
+            90% { transform: scale(0.9); }
+        }
+        .header-owl .beak {
+            animation: joyfulBeak 5s infinite;
+            transform-origin: 60px 96px;
+        }
+        
+        @keyframes joyfulBeakCursor {
+            0%, 80%, 100% { transform: scale(1); }
+            85%, 95% { transform: scale(1.2); }
+            90% { transform: scale(0.8); }
+        }
+        #owl-cursor .beak {
+            animation: joyfulBeakCursor 6s infinite;
+            transform-origin: 60px 62px;
+        }
+        
+        @keyframes joyfulCap {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(-5deg); }
+            90% { transform: rotate(5deg); }
+        }
+        .header-owl .cap {
+            animation: joyfulCap 5s infinite;
+            transform-origin: 60px 30px;
+        }
+        
+        @keyframes joyfulHatCursor {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(-8deg); }
+            90% { transform: rotate(8deg); }
+        }
+        #owl-cursor .hat {
+            animation: joyfulHatCursor 6s infinite;
+            transform-origin: 60px 25px;
+        }
+        
+        @keyframes joyfulTassel {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(-15deg); }
+            90% { transform: rotate(15deg); }
+        }
+        .header-owl .tassel {
+            animation: joyfulTassel 5s infinite;
+            transform-origin: 29.5px 30px;
+        }
+        
+        @keyframes joyfulFoot {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(-10deg); }
+            90% { transform: rotate(10deg); }
+        }
+        .header-owl .foot-left {
+            animation: joyfulFoot 5s infinite;
+            transform-origin: 45px 115px;
+        }
+        .header-owl .foot-right {
+            animation: joyfulFoot 5s infinite;
+            transform-origin: 75px 115px;
+        }
+        
+        @keyframes joyfulBody {
+            0%, 80%, 100% { transform: scale(1); }
+            85%, 95% { transform: scale(1.02); }
+            90% { transform: scale(0.98); }
+        }
+        .header-owl .body {
+            animation: joyfulBody 5s infinite;
+            transform-origin: 60px 70px;
+        }
+        
+        @keyframes joyfulTasselCursor {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(-20deg); }
+            90% { transform: rotate(20deg); }
+        }
+        #owl-cursor .tassel {
+            animation: joyfulTasselCursor 6s infinite;
+            transform-origin: 60px 25px;
+        }
+        
+        @keyframes joyfulFootCursor {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85%, 95% { transform: rotate(-15deg); }
+            90% { transform: rotate(15deg); }
+        }
+        #owl-cursor .foot-left {
+            animation: joyfulFootCursor 6s infinite;
+            transform-origin: 45px 105px;
+        }
+        #owl-cursor .foot-right {
+            animation: joyfulFootCursor 6s infinite;
+            transform-origin: 75px 105px;
+        }
+        
+        @keyframes joyfulBodyCursor {
+            0%, 80%, 100% { transform: scale(1); }
+            85%, 95% { transform: scale(1.03); }
+            90% { transform: scale(0.97); }
+        }
+        #owl-cursor .body {
+            animation: joyfulBodyCursor 6s infinite;
+            transform-origin: 60px 75px;
+        }
+        
+        @keyframes joyfulBellyCursor {
+            0%, 80%, 100% { transform: scale(1); }
+            85%, 95% { transform: scale(1.05); }
+            90% { transform: scale(0.95); }
+        }
+        #owl-cursor .belly {
+            animation: joyfulBellyCursor 6s infinite;
+            transform-origin: 60px 82.5px;
+        }
+        
+        @keyframes joyfulBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        #owl-cursor .owl-eyes {
+            animation: joyfulBlink 4s infinite;
+        }
+        
+        @keyframes flapLeft {
+            0%, 100% { transform: rotate(0deg) scaleX(1); }
+            50% { transform: rotate(-50deg) scaleX(1.2); }
+        }
+        @keyframes flapRight {
+            0%, 100% { transform: rotate(0deg) scaleX(1); }
+            50% { transform: rotate(50deg) scaleX(1.2); }
+        }
+        
+        #owl-cursor.is-moving svg { transform: scale(1.1); }
+        #owl-cursor.is-moving .wing-left { animation: flapLeft 0.12s infinite; }
+        #owl-cursor.is-moving .wing-right { animation: flapRight 0.12s infinite; }
+        #owl-cursor:not(.is-moving) .wing-left { animation: joyfulFlapLeft 6s infinite; }
+        #owl-cursor:not(.is-moving) .wing-right { animation: joyfulFlapRight 6s infinite; }
+        #owl-cursor:not(.is-moving) svg { animation: joyfulWiggle 4s ease-in-out infinite; }
+        @keyframes joyfulWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+
+        /* Glitter Trail Stars */
+        .trail-star {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998; /* Just below the cursor */
+            width: 10px; height: 10px;
+            /* Star shape using clip-path */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: fadeTrail 0.8s forwards ease-out;
+            will-change: transform, opacity;
+        }
+        @keyframes fadeTrail {
+            0% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.3) translateY(30px) rotate(180deg); }
+        }
+
+        /* Cursor Toggle Button */
+        #cursor-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 80px;
+            z-index: 10001;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Required IDs placeholders */
+        #study-material-list, #paid-courses-page {
+            display: none;
+        }
+
+        #paid-courses-page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            padding-top: 0;
+            animation: pcPageSlideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes pcPageSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .gold-dust-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="20" cy="20" r="1.5" fill="%23F59E0B" opacity="0.8"/><circle cx="70" cy="60" r="2" fill="%23F5A623" opacity="0.6"/><circle cx="40" cy="80" r="1" fill="%23FBBF24" opacity="0.9"/></svg>');
+            z-index: -1;
+            pointer-events: none;
+            animation: glitterMove 15s linear infinite;
+        }
+
+        /* =========================================
+           ADMIN DASHBOARD & LOGIN STYLES
+           ========================================= */
+        #pdf-viewer-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+        }
+        .pdf-viewer-content {
+            width: 90%; height: 90%;
+            background: #fff;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        .pdf-viewer-close {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: #000; color: #fff;
+            border: none; padding: 10px;
+            border-radius: 50%; cursor: pointer;
+            z-index: 20001;
+        }
+        #pdf-iframe {
+            width: 100%; height: 100%; border: none;
+        }
+
+        #admin-login-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 22, 40, 0.95); z-index: 20000;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        .admin-login-card {
+            background: #0B0D17; border: 2px solid var(--gold); padding: 40px;
+            border-radius: 16px; text-align: center; width: 90%; max-width: 400px;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.2), inset 0 0 15px rgba(245, 158, 11, 0.1);
+        }
+        .admin-login-card input {
+            width: 100%; padding: 12px 15px; margin: 20px 0; background: #171B2E;
+            border: 1px solid #1E2445; color: #fff; border-radius: 8px;
+            font-family: 'Nunito', sans-serif; font-size: 1rem; box-sizing: border-box;
+        }
+        .admin-login-card input:focus { outline: none; border-color: var(--gold); }
+        
+        #admin-crm {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0B0D17; z-index: 15000; flex-direction: row; color: #E2E8F0;
+        }
+        .admin-sidebar {
+            width: 260px; background: #101322; border-right: 1px solid #1E2445;
+            padding: 30px 20px; display: flex; flex-direction: column; gap: 10px;
+        }
+        .admin-sidebar-btn {
+            background: transparent; color: #64748B; border: none; text-align: left;
+            padding: 12px 15px; border-radius: 8px; cursor: pointer; font-size: 1rem;
+            font-family: 'Nunito', sans-serif; font-weight: 600; transition: all 0.3s;
+        }
+        .admin-sidebar-btn:hover, .admin-sidebar-btn.active {
+            background: rgba(245, 158, 11, 0.1); color: var(--gold);
+        }
+        .admin-main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .admin-header {
+            background: #101322; padding: 15px 30px; border-bottom: 1px solid #1E2445;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .admin-action-bar { display: flex; gap: 10px; }
+        .admin-action-btn {
+            background: #171B2E; border: 1px solid #1E2445; color: #E2E8F0;
+            padding: 8px 15px; border-radius: 6px; cursor: pointer; transition: 0.3s;
+            font-family: 'Nunito', sans-serif; font-weight: 600;
+        }
+        .admin-action-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .admin-content { padding: 40px; max-width: 1000px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .admin-panel { display: none; background: #171B2E; border: 1px solid #1E2445; border-radius: 12px; padding: 30px; }
+        .admin-panel.active { display: block; animation: fadeIn 0.3s ease; }
+        .admin-panel h2 { color: var(--gold); margin-top: 0; font-family: 'Space Grotesk', sans-serif; }
+        .admin-textarea {
+            width: 100%; height: 150px; background: #0B0D17; border: 1px solid #1E2445;
+            color: #fff; padding: 15px; border-radius: 8px; margin-bottom: 20px;
+            font-family: 'Nunito', sans-serif; font-size: 1rem; resize: vertical; box-sizing: border-box;
+        }
+        .admin-textarea:focus { outline: none; border-color: var(--gold); }
+        .admin-push-btn {
+            background: var(--gold); color: #000; border: none; padding: 12px 24px;
+            border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s;
+            font-family: 'Nunito', sans-serif; font-size: 1rem;
+        }
+        .admin-push-btn:hover { box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); transform: translateY(-2px); }
+        
+        .admin-input {
+            width: 100%; padding: 12px 15px; background: #171B2E;
+            border: 1px solid #1E2445; color: #fff; border-radius: 8px;
+            font-family: 'Nunito', sans-serif; font-size: 1rem; box-sizing: border-box;
+        }
+        .admin-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); transition: all 0.3s ease; }
+        .admin-list-item {
+            background: #0B0D17; padding: 15px 20px; border-radius: 8px; 
+            border: 1px solid #1E2445; margin-bottom: 10px; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-remove {
+            background: rgba(239, 68, 68, 0.1); color: var(--danger);
+            border: 1px solid var(--danger); padding: 6px 12px; border-radius: 6px;
+            cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-remove:hover { background: var(--danger); color: #fff; }
+
+        /* Toast Notifications */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 30000; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            background: #10B981; color: white; padding: 12px 20px; border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: translateX(120%);
+            animation: slideIn 0.3s forwards, fadeOut 0.3s 3.5s forwards;
+            font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 14px;
+            position: relative; overflow: hidden;
+        }
+        .toast.success::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            animation: glitterToast 2s infinite linear;
+            pointer-events: none;
+        }
+        @keyframes glitterToast {
+            0% { transform: translate(-30%, -30%) rotate(0deg); }
+            100% { transform: translate(30%, 30%) rotate(360deg); }
+        }
+        .toast.error { background: #EF4444; }
+        .toast.info { background: var(--accent-blue); }
+        @keyframes slideIn { to { transform: translateX(0); } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        /* =========================================
+           STUDY MATERIALS FACE STYLES
+           ========================================= */
+        #study-material-list {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            padding-top: 0;
+        }
+        .sm-header {
+            height: 70px;
+            padding: 0 40px; display: flex; align-items: center; gap: 20px;
+            background: rgba(10, 22, 40, 0.9); backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+            box-sizing: border-box;
+        }
+        .sm-filters {
+            display: flex; flex-wrap: wrap; gap: 15px; padding: 20px 40px;
+            background: rgba(10, 22, 40, 0.9); backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--gold);
+            position: sticky; top: 70px; z-index: 90;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .sm-filter-select {
+            padding: 10px 15px; background: var(--bg-dark); border: 1px solid var(--gold);
+            color: var(--text-primary); border-radius: 8px; font-family: 'Nunito', sans-serif;
+            outline: none; transition: all 0.3s ease; flex: 1; min-width: 150px;
+            cursor: pointer;
+        }
+        .sm-filter-select:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+        }
+        .sm-filter-select:focus { 
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            border-color: var(--accent-blue);
+        }
+        .sm-filter-select option {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+        .sm-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px; padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .sm-card {
+            background: #FDFD96;
+            border-radius: 2px;
+            padding: 25px;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+            transform: rotate(-1deg);
+        }
+        .sm-card:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.3);
+        }
+        .sm-badge {
+            position: absolute; top: -12px; right: 20px; background: var(--purple);
+            color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 700; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
+        }
+        .sm-card-title { color: #111; font-family: 'Caveat', cursive; font-size: 1.8rem; margin: 0; font-weight: 700; }
+        .sm-card-meta { color: #333; font-family: 'Caveat', cursive; font-size: 1.2rem; line-height: 1.4; }
+        .sm-btn-download {
+            background: var(--accent-blue); color: #fff; text-align: center;
+            padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 700;
+            transition: 0.3s; border: none; cursor: pointer; font-family: 'Nunito', sans-serif;
+            margin-top: auto; display: block;
+        }
+        .sm-btn-download:hover { background: var(--bright-blue); box-shadow: 0 0 15px rgba(43, 159, 230, 0.5); }
+        .sm-btn-login {
+            background: transparent; color: var(--gold); border: 1px solid var(--gold);
+            text-align: center; padding: 10px; border-radius: 8px; font-weight: 700;
+            transition: 0.3s; cursor: pointer; font-family: 'Nunito', sans-serif;
+            margin-top: auto; display: block; width: 100%;
+        }
+        .sm-btn-login:hover { background: rgba(245, 158, 11, 0.1); box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+        
+        #sm-empty-state {
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            padding: 80px 20px; text-align: center;
+        }
+        @keyframes floatZ {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(15px, -25px) scale(1.5); opacity: 0; }
+        }
+        .z-anim-1 { animation: floatZ 2.5s infinite linear; }
+        .z-anim-2 { animation: floatZ 2.5s infinite linear 1.25s; }
+
+        #flying-owl {
+            position: fixed; top: 50%; left: -150px; width: 80px; height: 80px;
+            z-index: 10005; pointer-events: none; transition: transform 1.2s cubic-bezier(0.45, 0, 0.55, 1);
+            transform: translateY(-50%);
+        }
+        .fly-active { transform: translate(calc(100vw + 150px), -50%) !important; }
+
+        /* =========================================
+           SIDEBAR STYLES
+           ========================================= */
+        #main-sidebar {
+            position: fixed;
+            top: 0; right: -320px;
+            width: 300px; height: 100%;
+            background: rgba(11, 26, 53, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 10005;
+            transition: right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: -5px 0 30px rgba(245, 158, 11, 0.4);
+            border-left: 1px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 30px 30px;
+            box-sizing: border-box;
+        }
+        #main-sidebar.open {
+            right: 0;
+        }
+        #sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10004;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #sidebar-overlay.open {
+            opacity: 1; pointer-events: auto;
+        }
+        .close-sidebar {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none; border: none;
+            color: var(--gold); font-size: 2.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .close-sidebar:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+        .sidebar-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+        .sidebar-link:hover {
+            color: var(--gold);
+            padding-left: 10px;
+        }
+        .admin-secret-link {
+            margin-top: auto;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0.5;
+            transition: opacity 0.3s, color 0.3s;
+        }
+        .admin-secret-link:hover { opacity: 1; color: var(--gold); }
+
+        /* =========================================
+           NOTICE BOX STYLES
+           ========================================= */
+        #notice-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            margin: 40px auto;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        #notice-box::before {
+            display: none;
+        }
+        @keyframes glitterMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 100px; }
+        }
+        .notice-title {
+            background: linear-gradient(to right, #ffffff, #c4e8f5, #ffffff);
+            background-size: 200% auto;
+            color: #ffffff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 4s linear infinite;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .notice-content {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+            font-weight: 400;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        /* Peeking Owls */
+        .peeking-owl {
+            position: absolute;
+            width: 60px; height: 60px;
+            z-index: -1;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .peeking-owl.top-left {
+            top: -45px; left: 30px;
+            transform: translateY(30px);
+            animation: peekTop 5s infinite alternate ease-in-out;
+        }
+        .peeking-owl.bottom-right {
+            bottom: -45px; right: 30px;
+            transform: translateY(-30px) rotate(180deg);
+            animation: peekBottom 5s infinite alternate ease-in-out;
+            animation-delay: 2.5s;
+        }
+        @keyframes peekTop {
+            0%, 60% { transform: translateY(30px); }
+            70%, 100% { transform: translateY(0); }
+        }
+        @keyframes peekBottom {
+            0%, 60% { transform: translateY(-30px) rotate(180deg); }
+            70%, 100% { transform: translateY(0) rotate(180deg); }
+        }
+        
+        /* =========================================
+           NEWS SECTION STYLES
+           ========================================= */
+        #news-section {
+            margin-top: 100px; /* Breathing room to see glitters */
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #ffffff, #ebd9eb, #ffffff);
+            background-size: 200% auto;
+            color: #ffffff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 4s linear infinite;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+        .news-card {
+            background: rgba(15, 32, 65, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Glitter border effect */
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border-radius: 18px;
+            background: linear-gradient(45deg, transparent, var(--gold), transparent, var(--accent-blue));
+            z-index: -1;
+            opacity: 0.5;
+            background-size: 200% 200%;
+            animation: shimmer 4s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .news-card h3 {
+            color: var(--text-primary);
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .news-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .read-more-btn {
+            background: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: none; /* Custom cursor */
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .read-more-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+            text-shadow: 0 0 5px var(--gold);
+        }
+
+        /* =========================================
+           SOCIAL FOOTER STYLES
+           ========================================= */
+        #social-footer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .social-icon-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            cursor: none;
+        }
+        .social-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 2;
+        }
+        .social-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;
+        }
+        .social-label {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            transition: color 0.3s ease;
+            text-align: center;
+        }
+        .social-icon-wrapper:hover .social-icon {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(43, 159, 230, 0.6);
+            transform: translateY(-5px);
+            color: #fff;
+        }
+        .social-icon-wrapper:hover .social-label {
+            color: var(--gold);
+        }
+        /* Pop-up Owl */
+        .hover-owl {
+            position: absolute;
+            top: 15px; /* Hidden behind the icon */
+            width: 35px;
+            height: 35px;
+            z-index: 1;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .social-icon-wrapper:hover .hover-owl {
+            top: -30px;
+            opacity: 1;
+            transform: rotate(-15deg) scale(1.1);
+        }
+        
+        @media (max-width: 1024px) {
+            #course-grid { grid-template-columns: repeat(2, 1fr); }
+            .sm-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .footer-content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-us-section {
+            max-width: 800px;
+            text-align: center;
+            background: rgba(11, 26, 53, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .about-title {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent-blue);
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        .mission-title {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--gold);
+            font-size: 1.6rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .about-text {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-social-wrapper {
+            width: 100%;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+        }
+
+        .contact-us-section {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .contact-title {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--gold);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 10px 20px;
+            background: rgba(43, 159, 230, 0.1);
+            border: 1px solid rgba(43, 159, 230, 0.3);
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .contact-link:hover {
+            background: rgba(43, 159, 230, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(43, 159, 230, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 10px 16px; height: 60px; }
+            .header-brand { gap: 8px; }
+            .logo { font-size: 1.8rem; }
+            .since-text { font-size: 0.5rem; margin-left: 5px; margin-top: 12px; }
+            .header-owl { width: 35px; height: 35px; }
+            .nav-btns { gap: 6px; }
+            .magic-btn { padding: 6px 10px; font-size: 0.8rem; }
+            
+            main { padding: 20px 16px; }
+            
+            #home-page p { font-size: 1rem !important; }
+            
+            .sm-header { padding: 15px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .sm-filters { padding: 10px 15px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .sm-filters::-webkit-scrollbar { display: none; }
+            .sm-grid { grid-template-columns: 1fr; padding: 15px; gap: 20px; }
+
+            .pc-header { padding: 15px; flex-direction: column; align-items: flex-start; gap: 15px; }
+            .pc-header h1 { font-size: 1.6rem !important; }
+            .pc-filters { width: 100%; overflow-x: auto; padding: 10px 0; margin-left: 0 !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .pc-filters::-webkit-scrollbar { display: none; }
+            .pc-content { padding: 20px 16px 40px; max-height: calc(100vh - 140px); }
+            
+            #notice-box { padding: 30px 20px; width: 100%; margin: 20px 0; }
+            #notice-box h2 { font-size: 1.5rem; }
+            
+            .review-card { min-width: 280px; padding: 20px; }
+            .reviews-title { font-size: 1.8rem; }
+
+            #course-grid { grid-template-columns: 1fr; gap: 20px; }
+            
+            .news-grid { grid-template-columns: 1fr; gap: 20px; }
+            
+            footer { padding: 40px 20px; text-align: center; }
+            .about-us-section { padding: 20px; }
+            .about-title { font-size: 1.8rem; }
+            .mission-title { font-size: 1.4rem; }
+            .about-text { font-size: 1rem; }
+            .contact-title { font-size: 1.4rem; }
+            .contact-link { font-size: 1rem; padding: 8px 16px; }
+            .footer-content { flex-direction: column; gap: 30px; }
+            .social-links { justify-content: center; gap: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.6rem; }
+            .since-text { font-size: 0.45rem; margin-top: 10px; }
+            .header-owl { width: 30px; height: 30px; }
+            #user-auth-btn { padding: 6px 10px; font-size: 0.7rem; }
+            .sidebar-link { font-size: 1.1rem; padding: 12px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Flapping Owl Cursor -->
+    <div id="owl-cursor">
+        <svg viewBox="0 0 120 120" width="40" height="40" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));">
+            <!-- Body (Ludo Shape: Rounded Square) -->
+            <rect class="body" x="25" y="40" width="70" height="70" rx="12" fill="#2B9FE6" stroke="#1A8CD8" stroke-width="2" />
+            <!-- Belly -->
+            <rect class="belly" x="35" y="68" width="50" height="35" rx="8" fill="#BEE3F8" />
+            <!-- Wings (Animated) -->
+            <path class="wing-left" d="M 25 65 C 5 65, 5 95, 25 95 Z" fill="#1A8CD8" />
+            <path class="wing-right" d="M 95 65 C 115 65, 115 95, 95 95 Z" fill="#1A8CD8" />
+            <!-- Feet -->
+            <path class="foot-left" d="M 42 108 C 37 118, 57 118, 52 108 Z" fill="#F5A623" />
+            <path class="foot-right" d="M 78 108 C 83 118, 63 118, 68 108 Z" fill="#F5A623" />
+            <!-- Eyes Group (Open) -->
+            <g class="owl-eyes" style="transform-origin: 60px 55px;">
+                <circle cx="42" cy="55" r="15" fill="#FFF" />
+                <circle cx="78" cy="55" r="15" fill="#FFF" />
+                <circle cx="45" cy="55" r="8" fill="#000" />
+                <circle cx="75" cy="55" r="8" fill="#000" />
+                <circle cx="42" cy="52" r="3" fill="#FFF" />
+                <circle cx="72" cy="52" r="3" fill="#FFF" />
+            </g>
+            <!-- Beak -->
+            <path class="beak" d="M 55 62 L 65 62 L 60 72 Z" fill="#F5A623" />
+            <!-- Graduation Hat (Pure Black) -->
+            <g class="hat">
+                <polygon points="60,10 15,25 60,40 105,25" fill="#000" />
+                <path d="M 35 32 L 35 48 C 35 55, 85 55, 85 48 L 85 32 Z" fill="#000" />
+                <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+                <g class="tassel">
+                    <path d="M 60 25 Q 90 30 95 50" fill="none" stroke="#F59E0B" stroke-width="2.5" />
+                    <polygon points="92,50 98,50 99,62 91,62" fill="#F59E0B" />
+                </g>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Cursor Toggle Button -->
+    <button id="cursor-toggle" class="magic-btn">Cursor: ON</button>
+
+    <!-- Disney Starfield Background -->
+    <div id="starfield"></div>
+
+    <!-- Floating Owl Doodles -->
+    <svg class="doodle doodle-tl" viewBox="0 0 120 120">
+        <rect x="25" y="40" width="70" height="70" rx="35" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 4" />
+        <g class="owl-eyes" style="transform-origin: 60px 55px;">
+            <circle cx="42" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+            <circle cx="78" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+        </g>
+        <path d="M 55 62 L 65 62 L 60 70 Z" fill="none" stroke="var(--gold)" stroke-width="3" />
+    </svg>
+    <svg class="doodle doodle-tr" viewBox="0 0 120 120">
+        <rect x="25" y="40" width="70" height="70" rx="35" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 4" />
+        <g class="owl-eyes" style="transform-origin: 60px 55px;">
+            <circle cx="42" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+            <circle cx="78" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+        </g>
+        <path d="M 55 62 L 65 62 L 60 70 Z" fill="none" stroke="var(--gold)" stroke-width="3" />
+    </svg>
+    <svg class="doodle doodle-bl" viewBox="0 0 120 120">
+        <rect x="25" y="40" width="70" height="70" rx="35" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 4" />
+        <g class="owl-eyes" style="transform-origin: 60px 55px;">
+            <circle cx="42" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+            <circle cx="78" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+        </g>
+        <path d="M 55 62 L 65 62 L 60 70 Z" fill="none" stroke="var(--gold)" stroke-width="3" />
+    </svg>
+    <svg class="doodle doodle-br" viewBox="0 0 120 120">
+        <rect x="25" y="40" width="70" height="70" rx="35" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="4 4" />
+        <g class="owl-eyes" style="transform-origin: 60px 55px;">
+            <circle cx="42" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+            <circle cx="78" cy="55" r="14" fill="none" stroke="var(--gold)" stroke-width="3" />
+        </g>
+        <path d="M 55 62 L 65 62 L 60 70 Z" fill="none" stroke="var(--gold)" stroke-width="3" />
+    </svg>
+
+    <!-- Cinematic Intro Overlay -->
+    <div id="intro-overlay">
+        <div id="glitter-container"></div>
+        <div id="intro-content">
+            <!-- High-Quality Cute Blue Owl SVG -->
+            <svg id="intro-owl" viewBox="0 0 120 120" width="280" height="280">
+                <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                <rect x="35" y="60" width="50" height="45" rx="22.5" fill="#BEE3F8" />
+                <path d="M 25 65 C 10 65, 10 95, 25 95 Z" fill="#1A8CD8" />
+                <path d="M 95 65 C 110 65, 110 95, 95 95 Z" fill="#1A8CD8" />
+                <path d="M 40 105 C 35 115, 55 115, 50 105 Z" fill="#F5A623" />
+                <path d="M 80 105 C 85 115, 65 115, 70 105 Z" fill="#F5A623" />
+                
+                <g id="intro-eyes" style="transform-origin: 60px 55px; transform: scaleY(0.1); transition: transform 0.15s ease;">
+                    <circle cx="42" cy="55" r="14" fill="#FFF" />
+                    <circle cx="78" cy="55" r="14" fill="#FFF" />
+                    <circle cx="45" cy="55" r="7" fill="#000" />
+                    <circle cx="75" cy="55" r="7" fill="#000" />
+                    <circle cx="42" cy="52" r="2.5" fill="#FFF" />
+                    <circle cx="72" cy="52" r="2.5" fill="#FFF" />
+                    <g class="eye-sparkle" style="opacity: 0; transform-origin: 47px 57px;">
+                        <path d="M 47 53 L 48 56 L 51 57 L 48 58 L 47 61 L 46 58 L 43 57 L 46 56 Z" fill="#F59E0B" />
+                    </g>
+                    <g class="eye-sparkle" style="opacity: 0; transform-origin: 77px 57px;">
+                        <path d="M 77 53 L 78 56 L 81 57 L 78 58 L 77 61 L 76 58 L 73 57 L 76 56 Z" fill="#F59E0B" />
+                    </g>
+                </g>
+                
+                <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                <path d="M 40 32 L 40 45 C 40 50, 80 50, 80 45 L 80 32 Z" fill="#222" />
+                <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+                <path d="M 60 25 Q 85 30 90 45" fill="none" stroke="#F59E0B" stroke-width="2" />
+                <polygon points="88,45 92,45 93,55 87,55" fill="#F59E0B" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal">
+        <div class="admin-login-card">
+            <h2 style="color: var(--gold); font-family: 'Space Grotesk', sans-serif; margin-top: 0;">Admin Access</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Authorized personnel only.</p>
+            <input type="password" id="admin-password" placeholder="Enter Password">
+            <button class="admin-push-btn" id="admin-login-submit" style="width: 100%;">Login</button>
+            <button class="admin-action-btn" id="admin-login-cancel" style="margin-top: 15px; width: 100%;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Sidebar & Overlay -->
+    <div id="sidebar-overlay"></div>
+    <aside id="main-sidebar">
+        <button class="close-sidebar" id="close-sidebar-btn">&times;</button>
+        <a href="#" class="sidebar-link" id="nav-home" onclick="showHotoopiaSection('home-page')">Home</a>
+        <a href="#" class="sidebar-link" id="nav-study-materials" onclick="showHotoopiaSection('study-material-list')">Study Materials</a>
+        <a href="#" class="sidebar-link" id="nav-paid-courses" onclick="showHotoopiaSection('paid-courses-page')">Paid Courses</a>
+        <a href="https://youtube.com/@hotoopia" target="_blank" rel="noopener noreferrer" class="sidebar-link">YouTube</a>
+        <a href="#" class="admin-secret-link">Admin Login</a>
+    </aside>
+
+    <header>
+        <div class="header-brand">
+            <button class="magic-btn btn-back" id="main-back-btn" style="display: none; align-items: center; gap: 8px; padding: 8px 16px; margin-right: 15px; overflow: visible;">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+                <svg class="btn-peeking-owl" viewBox="0 0 120 120" width="35" height="35">
+                    <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                    <rect x="35" y="60" width="50" height="45" rx="22.5" fill="#BEE3F8" />
+                    <g style="transform-origin: 60px 55px;">
+                        <circle cx="42" cy="55" r="14" fill="#FFF" />
+                        <circle cx="78" cy="55" r="14" fill="#FFF" />
+                        <circle cx="45" cy="55" r="7" fill="#000" />
+                        <circle cx="75" cy="55" r="7" fill="#000" />
+                        <circle cx="42" cy="52" r="2.5" fill="#FFF" />
+                        <circle cx="72" cy="52" r="2.5" fill="#FFF" />
+                    </g>
+                    <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                </svg>
+            </button>
+            <svg class="header-owl" viewBox="0 0 120 120" width="55" height="55">
+                <!-- Cap Board -->
+                <polygon class="cap" points="60,16 25,30 60,44 95,30" fill="#000" />
+                <!-- Cap Tassel -->
+                <rect class="tassel" x="28" y="30" width="3" height="14" fill="#000" />
+                <!-- Owl Body -->
+                <path class="body" d="M 15 38 Q 60 58 105 38 C 125 75 105 115 60 115 C 15 115 -5 75 15 38 Z" fill="#2B9FE6" />
+                <!-- Feet -->
+                <path class="foot-left" d="M 40 115 C 35 125, 55 125, 50 115 Z" fill="#F5A623" />
+                <path class="foot-right" d="M 80 115 C 85 125, 65 125, 70 115 Z" fill="#F5A623" />
+                <!-- Wings -->
+                <path class="wing-left" d="M 30 70 C 10 70, 10 100, 30 100 Z" fill="#1A8CD8" />
+                <path class="wing-right" d="M 90 70 C 110 70, 110 100, 90 100 Z" fill="#1A8CD8" />
+                <!-- Eyes -->
+                <g class="owl-eyes" style="transform-origin: 60px 70px;">
+                    <circle cx="38" cy="70" r="22" fill="#FFF" />
+                    <circle cx="82" cy="70" r="22" fill="#FFF" />
+                    <!-- Pupils -->
+                    <circle cx="44" cy="68" r="14" fill="#000" />
+                    <circle cx="88" cy="68" r="14" fill="#000" />
+                    <!-- Catchlights -->
+                    <circle cx="49" cy="62" r="4" fill="#FFF" />
+                    <circle cx="93" cy="62" r="4" fill="#FFF" />
+                </g>
+                <!-- Beak -->
+                <polygon class="beak" points="60,86 52,96 60,106 68,96" fill="#F5A623" />
+            </svg>
+            <h1 class="logo">Hotoopia</h1>
+            <span class="since-text">since 2015</span>
+        </div>
+        
+        <div class="nav-btns">
+            <!-- Hidden Admin Buttons -->
+            <button class="magic-btn btn-undo" style="display:none;">Undo</button>
+            <button class="magic-btn btn-redo" style="display:none;">Redo</button>
+            <button class="magic-btn btn-add" style="display:none;">Add</button>
+            <button class="magic-btn btn-remove" style="display:none;">Remove</button>
+            
+            <!-- Visible Nav Buttons -->
+            <button class="magic-btn" id="user-auth-btn">Google Login</button>
+            <button class="magic-btn" id="menu-btn" aria-label="Menu">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div id="home-page">
+            <h1 class="welcome-title">Welcome to the Magic of Learning</h1>
+            <p style="color: #FFFFFF; font-size: 1.4rem; text-align: center; max-width: 700px; margin: 0 auto 30px; font-weight: 600; letter-spacing: 0.03em; line-height: 1.6; opacity: 0; transform: translateY(20px); animation: fadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+                Explore the universe of knowledge with Hootie.
+            </p>
+
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; margin-bottom: 60px; opacity: 0; transform: translateY(20px); animation: fadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1) 0.4s forwards;">
+                <span class="board-badge">CBSE</span>
+                <span class="board-badge">ICSE</span>
+                <span class="board-badge">State Board</span>
+            </div>
+            
+            <!-- Notice Box -->
+            <div id="notice-box">
+            <!-- Peeking Owl Top Left -->
+            <svg class="peeking-owl top-left" viewBox="0 0 120 120">
+                <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                <g style="transform-origin: 60px 55px;">
+                    <circle cx="42" cy="55" r="14" fill="#FFF" />
+                    <circle cx="78" cy="55" r="14" fill="#FFF" />
+                    <circle cx="45" cy="55" r="7" fill="#000" />
+                    <circle cx="75" cy="55" r="7" fill="#000" />
+                    <circle cx="42" cy="52" r="2.5" fill="#FFF" />
+                    <circle cx="72" cy="52" r="2.5" fill="#FFF" />
+                </g>
+                <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                <path d="M 40 32 L 40 45 C 40 50, 80 50, 80 45 L 80 32 Z" fill="#222" />
+                <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+            </svg>
+            
+            <!-- Peeking Owl Bottom Right -->
+            <svg class="peeking-owl bottom-right" viewBox="0 0 120 120">
+                <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                <g style="transform-origin: 60px 55px;">
+                    <circle cx="42" cy="55" r="14" fill="#FFF" />
+                    <circle cx="78" cy="55" r="14" fill="#FFF" />
+                    <circle cx="45" cy="55" r="7" fill="#000" />
+                    <circle cx="75" cy="55" r="7" fill="#000" />
+                    <circle cx="42" cy="52" r="2.5" fill="#FFF" />
+                    <circle cx="72" cy="52" r="2.5" fill="#FFF" />
+                </g>
+                <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                <path d="M 40 32 L 40 45 C 40 50, 80 50, 80 45 L 80 32 Z" fill="#222" />
+                <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+            </svg>
+
+            <h2 class="notice-title">Latest Updates</h2>
+            <p class="notice-content">Welcome Hotoopians! New Study Materials for Class 10 Board Exams coming soon! ✨</p>
+        </div>
+
+        <!-- Education News Section -->
+        <section id="news-section">
+            <h2 class="section-title">Education News</h2>
+            <div class="news-grid">
+                <div class="news-card">
+                    <h3>Board Exam Dates Announced</h3>
+                    <p>CBSE and ICSE have released the tentative date sheets for the upcoming Class 10 and 12 board examinations. Check the full schedule here.</p>
+                    <button class="read-more-btn">Read More</button>
+                </div>
+                <div class="news-card">
+                    <h3>New Syllabus Updates</h3>
+                    <p>NCERT has rationalized the syllabus for Science and Mathematics. Find out which chapters have been modified for the new academic session.</p>
+                    <button class="read-more-btn">Read More</button>
+                </div>
+                <div class="news-card">
+                    <h3>Scholarship Alert 2026</h3>
+                    <p>Applications are now open for the National Talent Search Examination (NTSE). Eligible students from Class 10 can apply online.</p>
+                    <button class="read-more-btn">Read More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Hotoopia Section -->
+        <section id="why-hotoopia" style="margin-top: 60px; width: 100%; text-align: center; margin-bottom: 80px;">
+            <h2 class="section-title">Why Hotoopia?</h2>
+            <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px;">
+                <div class="feature-card" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 40px 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); transition: transform 0.3s ease; cursor: default; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);">
+                    <div style="font-size: 3.5rem; margin-bottom: 20px;">🚀</div>
+                    <h3 style="color: #ffffff; margin-bottom: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700;">Smart Learning</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); font-size: 1rem; line-height: 1.6;">Interactive study materials designed for modern Indian students to grasp concepts faster.</p>
+                </div>
+                <div class="feature-card" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 40px 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); transition: transform 0.3s ease; cursor: default; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);">
+                    <div style="font-size: 3.5rem; margin-bottom: 20px;">🦉</div>
+                    <h3 style="color: #ffffff; margin-bottom: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700;">Hootie's Guidance</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); font-size: 1rem; line-height: 1.6;">Our AI mascot Hootie helps you navigate complex subjects with ease and fun.</p>
+                </div>
+                <div class="feature-card" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 40px 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); transition: transform 0.3s ease; cursor: default; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);">
+                    <div style="font-size: 3.5rem; margin-bottom: 20px;">📚</div>
+                    <h3 style="color: #ffffff; margin-bottom: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700;">All Boards</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); font-size: 1rem; line-height: 1.6;">Comprehensive coverage for CBSE, ICSE, and all State Boards across India.</p>
+                </div>
+            </div>
+        </section>
+        </div> <!-- End home-page -->
+
+        <!-- Admin CRM Dashboard -->
+        <div id="admin-crm">
+            <aside class="admin-sidebar">
+                <h2 style="color: var(--gold); font-family: 'Space Grotesk', sans-serif; margin-top: 0; margin-bottom: 30px;">Hotoopia Brain</h2>
+                <button class="admin-sidebar-btn active" data-target="panel-homepage">Home Page Settings</button>
+                <button class="admin-sidebar-btn" data-target="panel-study">Study Materials</button>
+                <button class="admin-sidebar-btn" data-target="panel-courses">Paid Courses</button>
+                <button class="admin-sidebar-btn" data-target="panel-godmode">God Mode</button>
+                <div style="flex: 1;"></div>
+                <button class="admin-sidebar-btn" id="admin-logout-btn" style="color: var(--danger);">Sign Out</button>
+            </aside>
+            <main class="admin-main">
+                <header class="admin-header">
+                    <div class="admin-action-bar"></div>
+                    <div style="color: var(--gold); font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Admin Mode Active ✨</div>
+                </header>
+                <div class="admin-content">
+                    <!-- Home Page Panel -->
+                    <div id="panel-homepage" class="admin-panel active">
+                        <h2>Home Page Settings</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 20px;">Update the main text and latest updates box on the Home Page.</p>
+                        
+                        <div style="background: #0B0D17; padding: 20px; border-radius: 8px; border: 1px solid #1E2445; margin-bottom: 20px;">
+                            <h3 style="color: var(--gold); margin-top: 0; margin-bottom: 15px;">Welcome Section</h3>
+                            <input type="text" id="welcome-title-admin" class="admin-input" placeholder="Welcome Title" style="margin-bottom: 15px;">
+                            <textarea id="welcome-subtext-admin" class="admin-textarea" placeholder="Welcome Subtext" style="height: 80px; margin-bottom: 0;"></textarea>
+                        </div>
+
+                        <div style="background: #0B0D17; padding: 20px; border-radius: 8px; border: 1px solid #1E2445; margin-bottom: 20px;">
+                            <h3 style="color: var(--gold); margin-top: 0; margin-bottom: 15px;">Latest Updates Box</h3>
+                            <input type="text" id="notice-title-admin" class="admin-input" placeholder="Notice Box Title" style="margin-bottom: 15px;">
+                            <textarea id="notice-box-admin" class="admin-textarea" placeholder="Enter new notice here..." style="margin-bottom: 0;"></textarea>
+                        </div>
+
+                        <button id="push-homepage-btn" class="admin-push-btn">Push Updates ✨</button>
+                    </div>
+                    <!-- Study Materials Panel -->
+                    <div id="panel-study" class="admin-panel">
+                        <h2>Study Materials Manager</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 20px;">Upload and manage study resources.</p>
+                        
+                        <div id="study-material-admin" style="background: #0B0D17; padding: 20px; border-radius: 8px; border: 1px solid #1E2445; margin-bottom: 20px;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                                <select id="sm-class" class="admin-input">
+                                    <option value="">Select Class</option>
+                                    <option value="5">Class 5</option>
+                                    <option value="6">Class 6</option>
+                                    <option value="7">Class 7</option>
+                                    <option value="8">Class 8</option>
+                                    <option value="9">Class 9</option>
+                                    <option value="10">Class 10</option>
+                                    <option value="11">Class 11</option>
+                                    <option value="12">Class 12</option>
+                                </select>
+                                <select id="sm-board" class="admin-input">
+                                    <option value="">Select Board</option>
+                                    <option value="CBSE">CBSE</option>
+                                    <option value="ICSE">ICSE</option>
+                                    <option value="UP Board">UP Board</option>
+                                    <option value="Maharashtra Board">Maharashtra Board</option>
+                                    <option value="Karnataka Board">Karnataka Board</option>
+                                    <option value="Tamil Nadu Board">Tamil Nadu Board</option>
+                                    <option value="Rajasthan Board">Rajasthan Board</option>
+                                    <option value="MP Board">MP Board</option>
+                                    <option value="Gujarat Board">Gujarat Board</option>
+                                    <option value="Bihar Board">Bihar Board</option>
+                                    <option value="NIOS">NIOS</option>
+                                    <option value="All Boards">All Boards</option>
+                                </select>
+                                <select id="sm-stream" class="admin-input" style="display: none;">
+                                    <option value="">Select Stream</option>
+                                    <option value="Science">Science</option>
+                                    <option value="Commerce">Commerce</option>
+                                    <option value="Arts">Arts</option>
+                                </select>
+                                <select id="sm-subject" class="admin-input">
+                                    <option value="">Select Subject</option>
+                                </select>
+                                <input type="text" id="sm-custom-subject" class="admin-input" placeholder="Enter Custom Subject" style="display: none;">
+                                
+                                <select id="sm-type" class="admin-input">
+                                    <option value="">Material Type</option>
+                                    <option value="Handwritten Notes">Handwritten Notes</option>
+                                    <option value="PYQs">PYQs</option>
+                                    <option value="Sample Papers">Sample Papers</option>
+                                    <option value="Mind Maps">Mind Maps</option>
+                                    <option value="Other">Add Custom Type...</option>
+                                </select>
+                                <input type="text" id="sm-custom-type" class="admin-input" placeholder="Enter Custom Type (e.g. Ayurvedic Shlokas)" style="display: none;">
+                                
+                                <input type="text" id="sm-name" class="admin-input" placeholder="Material Title (e.g. Chapter 1 Kinematics)">
+                                <input type="text" id="sm-link" class="admin-input" placeholder="Google Drive / PDF Link">
+                                <input type="text" id="sm-thumb" class="admin-input" placeholder="Thumbnail Image URL (Optional)" style="grid-column: 1 / -1;">
+                            </div>
+                            <button id="sm-btn-add" class="admin-push-btn btn-add" style="width: 100%;">Add Material ✨</button>
+                        </div>
+                        
+                        <div id="study-material-list-admin">
+                            <!-- List items injected here -->
+                        </div>
+                    </div>
+                    <!-- Paid Courses Panel -->
+                    <div id="panel-courses" class="admin-panel">
+                        <h2>Paid Courses Manager</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 20px;">Add Razorpay links and prices.</p>
+                        
+                        <div id="paid-courses-admin" style="background: #0B0D17; padding: 20px; border-radius: 8px; border: 1px solid #1E2445; margin-bottom: 20px;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                                <input type="text" id="pc-name" class="admin-input" placeholder="Course Name">
+                                <select id="pc-category" class="admin-input">
+                                    <option value="">Select Category</option>
+                                    <option value="Class 5-8">Class 5-8</option>
+                                    <option value="Class 9-10">Class 9-10</option>
+                                    <option value="Class 11-12">Class 11-12</option>
+                                    <option value="Competitive">Competitive Exams</option>
+                                    <option value="Skills">Skill Development</option>
+                                </select>
+                                <input type="text" id="pc-price" class="admin-input" placeholder="Price (₹)">
+                                <input type="text" id="pc-duration" class="admin-input" placeholder="Duration (e.g. 6 Months)">
+                                <input type="text" id="pc-language" class="admin-input" placeholder="Language (e.g. Hindi/English)">
+                                <input type="text" id="pc-link" class="admin-input" placeholder="Razorpay Payment Link">
+                                <input type="text" id="pc-highlights" class="admin-input" placeholder="Highlights (comma separated, e.g. Live Classes, PDF Notes)" style="grid-column: 1 / -1;">
+                                <div style="display: flex; flex-direction: column; gap: 10px; grid-column: 1 / -1;">
+                                    <div style="display: flex; align-items: center; gap: 10px; background: rgba(245, 158, 11, 0.05); padding: 12px; border-radius: 10px; border: 1px dashed var(--gold);">
+                                        <input type="checkbox" id="pc-is-popular" style="width: 20px; height: 20px; cursor: pointer;">
+                                        <label for="pc-is-popular" style="color: var(--gold); font-weight: 700; cursor: pointer; font-size: 0.9rem;">Mark as Popular / Trending 🔥</label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 10px; grid-column: 1 / -1;">
+                                    <input type="file" id="pc-thumb-file" accept="image/*" style="display: none;">
+                                    <button type="button" id="pc-thumb-upload-btn" class="admin-push-btn" style="background: var(--bg-panel); border: 1px dashed var(--border); color: var(--text-muted); font-size: 0.9rem; padding: 12px;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                        Upload Thumbnail (Optional)
+                                    </button>
+                                    <div id="pc-thumb-preview" style="display: none; width: 100%; height: 120px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                                        <img src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                </div>
+                            </div>
+                            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #E2E8F0; cursor: pointer; font-family: 'Nunito', sans-serif;">
+                                <input type="checkbox" id="pc-verified" style="width: 20px; height: 20px; accent-color: var(--success);">
+                                Razorpay Verified Badge
+                            </label>
+                            <div style="margin-top: 15px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid var(--success); font-size: 0.8rem; color: var(--success); margin-bottom: 15px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 5px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                <strong>Auto-Magic:</strong> A high-rating student review will be automatically generated for this course to boost trust!
+                            </div>
+                            <button id="pc-btn-add" class="admin-push-btn btn-add" style="width: 100%;">Add Course ✨</button>
+                        </div>
+                        
+                        <div id="paid-courses-list-admin">
+                            <!-- List items injected here -->
+                        </div>
+                    </div>
+                    <!-- God Mode Panel -->
+                    <div id="panel-godmode" class="admin-panel">
+                        <h2>God Mode</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 20px;">Site visitors and download counts.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                            <div style="background: #0B0D17; padding: 30px 20px; border-radius: 8px; border: 1px solid #1E2445; text-align: center;">
+                                <div style="font-size: 2.5rem; color: var(--gold); font-family: 'Space Grotesk', sans-serif; margin-bottom: 10px;">1,204</div>
+                                <div style="color: var(--text-muted); font-weight: 600;">Active Visitors</div>
+                            </div>
+                            <div style="background: #0B0D17; padding: 30px 20px; border-radius: 8px; border: 1px solid #1E2445; text-align: center;">
+                                <div style="font-size: 2.5rem; color: var(--accent-blue); font-family: 'Space Grotesk', sans-serif; margin-bottom: 10px;">8,432</div>
+                                <div style="color: var(--text-muted); font-weight: 600;">Total Downloads</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <!-- Study Materials Face (Frontend) -->
+        <div id="study-material-list">
+            <div id="stationery-container">
+                <svg class="stationery-icon" style="top: 10%; left: 5%; transform: rotate(20deg);" viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="#333" stroke-width="1.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                <svg class="stationery-icon" style="top: 30%; right: 10%; transform: rotate(-15deg);" viewBox="0 0 24 24" width="80" height="80" fill="none" stroke="#333" stroke-width="1.5"><line x1="18" y1="2" x2="22" y2="6"/><path d="M15 5l4 4"/><path d="M11 9l7 7"/><path d="M7 13l7 7"/><path d="M3 17l7 7"/></svg>
+                <svg class="stationery-icon" style="bottom: 20%; left: 15%; transform: rotate(-45deg);" viewBox="0 0 24 24" width="100" height="100" fill="none" stroke="#333" stroke-width="1.5"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M15 2v4a2 2 0 0 0 2 2h4"/></svg>
+                <svg class="stationery-icon" style="bottom: 10%; right: 20%; transform: rotate(10deg);" viewBox="0 0 24 24" width="50" height="50" fill="none" stroke="#333" stroke-width="1.5"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            </div>
+
+            <div class="sm-content-wrapper">
+                <div class="sm-header">
+                    <button class="magic-btn" onclick="showHotoopiaSection('home-page')" style="padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Back
+                    </button>
+                    <h1 style="color: var(--gold); font-family: 'Space Grotesk', sans-serif; margin: 0; font-size: 1.8rem;">Study Materials</h1>
+                </div>
+            
+            <nav id="filter-bar" class="sm-filters">
+                <select id="class-filter" class="sm-filter-select">
+                    <option value="">Select Class</option>
+                    <option value="5">Class 5</option>
+                    <option value="6">Class 6</option>
+                    <option value="7">Class 7</option>
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                </select>
+                <select id="board-filter" class="sm-filter-select">
+                    <option value="">Select Board</option>
+                    <option value="CBSE">CBSE</option>
+                    <option value="ICSE">ICSE</option>
+                    <option value="UP Board">UP Board</option>
+                    <option value="Maharashtra Board">Maharashtra Board</option>
+                    <option value="Karnataka Board">Karnataka Board</option>
+                    <option value="Tamil Nadu Board">Tamil Nadu Board</option>
+                    <option value="Rajasthan Board">Rajasthan Board</option>
+                    <option value="MP Board">MP Board</option>
+                    <option value="Gujarat Board">Gujarat Board</option>
+                    <option value="Bihar Board">Bihar Board</option>
+                    <option value="NIOS">NIOS</option>
+                    <option value="All Boards">All Boards</option>
+                </select>
+                <select id="stream-filter" class="sm-filter-select">
+                    <option value="">Select Stream</option>
+                    <option value="Science">Science</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Arts">Arts</option>
+                    <option value="N/A">N/A</option>
+                </select>
+                <select id="subject-filter" class="sm-filter-select">
+                    <option value="">Select Subject</option>
+                </select>
+                <button id="clear-filters-btn" class="magic-btn" style="padding: 8px 16px; font-size: 0.85rem; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #EF4444;">Clear Filters</button>
+            </nav>
+
+            <div id="sm-results-grid" class="sm-grid"></div>
+
+            <div id="sm-empty-state">
+                <!-- Sleeping Owl SVG -->
+                <svg viewBox="0 0 120 120" width="150" height="150">
+                    <rect x="25" y="40" width="70" height="70" rx="35" fill="#1A3A6B" />
+                    <g style="transform-origin: 60px 55px;">
+                        <path d="M 35 55 Q 42 60 49 55" stroke="#0B1A35" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <path d="M 71 55 Q 78 60 85 55" stroke="#0B1A35" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </g>
+                    <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                    <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                    <text x="75" y="35" fill="#BEE3F8" font-family="Nunito" font-size="16" font-weight="bold" class="z-anim-1">Z</text>
+                    <text x="90" y="20" fill="#BEE3F8" font-family="Nunito" font-size="22" font-weight="bold" class="z-anim-2">Z</text>
+                </svg>
+                <h2 style="color: var(--gold); font-family: 'Space Grotesk', sans-serif; margin-top: 20px;">Coming Soon ✨</h2>
+                <p style="color: var(--text-muted);">Hootie is still gathering materials for this selection.</p>
+            </div>
+        </div>
+    </div>
+        
+        <!-- Flying Owl Animation -->
+        <svg id="flying-owl" viewBox="0 0 120 120">
+            <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+            <g style="transform-origin: 60px 55px;">
+                <circle cx="42" cy="55" r="14" fill="#FFF" />
+                <circle cx="78" cy="55" r="14" fill="#FFF" />
+                <circle cx="45" cy="55" r="7" fill="#000" />
+                <circle cx="75" cy="55" r="7" fill="#000" />
+            </g>
+            <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+            <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+            <!-- Wings -->
+            <path d="M 25 60 Q 5 60 15 80 Z" fill="#2B9FE6" />
+            <path d="M 95 60 Q 115 60 105 80 Z" fill="#2B9FE6" />
+        </svg>
+
+        <!-- Paid Courses Face -->
+        <div id="paid-courses-page">
+            <div class="gold-dust-bg"></div>
+            <div class="pc-header">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <button class="magic-btn" onclick="showHotoopiaSection('home-page')" style="padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Back
+                    </button>
+                    <div class="pc-title-group">
+                        <span class="pc-subtitle" style="color: var(--text-muted); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700;">Premium Learning</span>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <h1 style="color: var(--gold); font-family: 'Space Grotesk', sans-serif; margin: 0; font-size: 2rem; line-height: 1;">Paid Courses</h1>
+                            <span id="pc-count-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--gold); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; border: 1px solid rgba(245, 158, 11, 0.2);">0 Courses</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pc-filters">
+                    <button class="pc-filter-btn active" data-category="all">All</button>
+                    <button class="pc-filter-btn" data-category="Class 5-8">Class 5-8</button>
+                    <button class="pc-filter-btn" data-category="Class 9-10">Class 9-10</button>
+                    <button class="pc-filter-btn" data-category="Class 11-12">Class 11-12</button>
+                    <button class="pc-filter-btn" data-category="Competitive">Competitive</button>
+                    <button class="pc-filter-btn" data-category="Skills">Skills</button>
+                </div>
+            </div>
+            <div class="pc-content">
+                <div id="pc-empty-state" class="pc-empty-state" style="display: none;">
+                    <!-- Blue Owl studying with a gold book -->
+                    <svg viewBox="0 0 120 120">
+                        <!-- Book -->
+                        <path d="M 20 90 Q 60 100 100 90 L 100 110 Q 60 120 20 110 Z" fill="#F59E0B" />
+                        <path d="M 20 85 Q 60 95 100 85 L 100 90 Q 60 100 20 90 Z" fill="#FBBF24" />
+                        <path d="M 60 85 L 60 115" stroke="#B45309" stroke-width="2" />
+                        <!-- Body -->
+                        <rect x="35" y="30" width="50" height="60" rx="25" fill="#2B9FE6" />
+                        <!-- Belly -->
+                        <rect x="42.5" y="45" width="35" height="40" rx="17.5" fill="#BEE3F8" />
+                        <!-- Closed Eyes (Sleeping) -->
+                        <path d="M 42 45 Q 48 50 54 45" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" />
+                        <path d="M 66 45 Q 72 50 78 45" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" />
+                        <!-- Zzz -->
+                        <text x="80" y="20" fill="#2B9FE6" font-family="sans-serif" font-size="12" font-weight="bold">Z</text>
+                        <text x="95" y="10" fill="#2B9FE6" font-family="sans-serif" font-size="16" font-weight="bold">Z</text>
+                        <!-- Beak -->
+                        <path d="M 60 52 L 64 58 L 56 58 Z" fill="#F5A623" />
+                        <!-- Cap -->
+                        <path d="M 30 25 L 60 15 L 90 25 L 60 35 Z" fill="#111" />
+                        <rect x="50" y="30" width="20" height="10" fill="#111" />
+                        <path d="M 85 25 L 85 40" stroke="#F5A623" stroke-width="2" />
+                        <!-- Wings holding book -->
+                        <path d="M 35 60 Q 25 75 40 85" fill="none" stroke="#1A8CD8" stroke-width="6" stroke-linecap="round" />
+                        <path d="M 85 60 Q 95 75 80 85" fill="none" stroke="#1A8CD8" stroke-width="6" stroke-linecap="round" />
+                    </svg>
+                    <h2>Coming Soon ✨</h2>
+                    <p>Hootie is preparing world-class courses for you. Stay tuned! ✨</p>
+                </div>
+
+                <div id="course-grid">
+                    <!-- Cards injected via JS -->
+                </div>
+
+                <div class="reviews-section" id="pc-reviews-section" style="display: none;">
+                    <h2 class="reviews-title">Student Testimonials</h2>
+                    <div class="reviews-slider" id="pc-reviews-slider">
+                        <!-- Reviews injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content-wrapper">
+            <div class="about-us-section">
+                <h2 class="about-title">The Legend of Hotoopia</h2>
+                <p class="about-text">Welcome to Hotoopia, the enchanted universe where the "Boring" of books disappears and the Magic of Learning begins.</p>
+                <p class="about-text">Founded in India for the modern student, Hotoopia was born from a simple truth: Education shouldn't feel like a chore; it should feel like an adventure. We’ve replaced dusty classrooms with a sparkling digital realm, guided by Hootie, our Master of Wisdom.</p>
+                
+                <h3 class="mission-title">Our Mission</h3>
+                <p class="about-text">To empower students from Class 5th to 12th across all Indian boards (CBSE, ICSE, and State Boards) by providing world-class study materials—Definitions, Formulas, and PYQs—wrapped in a professional, magical experience.</p>
+            </div>
+
+            <div class="contact-us-section">
+                <h3 class="contact-title">Contact Us</h3>
+                <p class="about-text" style="margin-bottom: 20px;">Have questions or need support? Reach out to us!</p>
+                <a href="mailto:hotoopia01@gmail.com" class="contact-link">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    hotoopia01@gmail.com
+                </a>
+            </div>
+            
+            <div class="footer-social-wrapper">
+                <p style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--gold); font-size: 1.2rem; margin-bottom: 20px;">Learn Smarter with Hotoopia</p>
+                
+                <div id="social-footer">
+            <!-- Telegram -->
+            <a href="https://t.me/hotoopia" target="_blank" rel="noopener noreferrer" class="social-icon-wrapper">
+                <svg class="hover-owl" viewBox="0 0 120 120">
+                    <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                    <rect x="35" y="60" width="50" height="45" rx="22.5" fill="#BEE3F8" />
+                    <g style="transform-origin: 60px 55px;">
+                        <circle cx="42" cy="55" r="14" fill="#FFF" />
+                        <circle cx="78" cy="55" r="14" fill="#FFF" />
+                        <circle cx="45" cy="55" r="7" fill="#000" />
+                        <circle cx="75" cy="55" r="7" fill="#000" />
+                    </g>
+                    <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                    <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                    <path d="M 40 32 L 40 45 C 40 50, 80 50, 80 45 L 80 32 Z" fill="#222" />
+                    <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+                </svg>
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                </div>
+                <span class="social-label">Telegram</span>
+            </a>
+
+            <!-- IG High School -->
+            <a href="https://www.instagram.com/hotoopia.hs?igsh=cmFzYXhkNXVrZDdj" target="_blank" rel="noopener noreferrer" class="social-icon-wrapper">
+                <svg class="hover-owl" viewBox="0 0 120 120">
+                    <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                    <rect x="35" y="60" width="50" height="45" rx="22.5" fill="#BEE3F8" />
+                    <g style="transform-origin: 60px 55px;">
+                        <circle cx="42" cy="55" r="14" fill="#FFF" />
+                        <circle cx="78" cy="55" r="14" fill="#FFF" />
+                        <circle cx="45" cy="55" r="7" fill="#000" />
+                        <circle cx="75" cy="55" r="7" fill="#000" />
+                    </g>
+                    <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                    <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                    <path d="M 40 32 L 40 45 C 40 50, 80 50, 80 45 L 80 32 Z" fill="#222" />
+                    <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+                </svg>
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </div>
+                <span class="social-label">IG (11th-12th)</span>
+            </a>
+
+            <!-- IG Main -->
+            <a href="https://www.instagram.com/hotoopia?igsh=MTM4Ym1pcnB3eGwzbQ==" target="_blank" rel="noopener noreferrer" class="social-icon-wrapper">
+                <svg class="hover-owl" viewBox="0 0 120 120">
+                    <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                    <rect x="35" y="60" width="50" height="45" rx="22.5" fill="#BEE3F8" />
+                    <g style="transform-origin: 60px 55px;">
+                        <circle cx="42" cy="55" r="14" fill="#FFF" />
+                        <circle cx="78" cy="55" r="14" fill="#FFF" />
+                        <circle cx="45" cy="55" r="7" fill="#000" />
+                        <circle cx="75" cy="55" r="7" fill="#000" />
+                    </g>
+                    <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                    <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                    <path d="M 40 32 L 40 45 C 40 50, 80 50, 80 45 L 80 32 Z" fill="#222" />
+                    <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+                </svg>
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </div>
+                <span class="social-label">IG (5th-10th)</span>
+            </a>
+
+            <!-- YouTube -->
+            <a href="https://youtube.com/@hotoopia?si=EI5eMYSulQ9p2Y9R" target="_blank" rel="noopener noreferrer" class="social-icon-wrapper">
+                <svg class="hover-owl" viewBox="0 0 120 120">
+                    <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                    <rect x="35" y="60" width="50" height="45" rx="22.5" fill="#BEE3F8" />
+                    <g style="transform-origin: 60px 55px;">
+                        <circle cx="42" cy="55" r="14" fill="#FFF" />
+                        <circle cx="78" cy="55" r="14" fill="#FFF" />
+                        <circle cx="45" cy="55" r="7" fill="#000" />
+                        <circle cx="75" cy="55" r="7" fill="#000" />
+                    </g>
+                    <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                    <polygon points="60,12 20,25 60,38 100,25" fill="#111" />
+                    <path d="M 40 32 L 40 45 C 40 50, 80 50, 80 45 L 80 32 Z" fill="#222" />
+                    <circle cx="60" cy="25" r="3" fill="#F59E0B" />
+                </svg>
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </div>
+                <span class="social-label">YouTube</span>
+            </a>
+        </div>
+        </div>
+        </div>
+    </footer>
+
+    <script>
+        var studyMaterials = [];
+        window.db = {
+            collection: function() {
+                return {
+                    onSnapshot: function() {},
+                    add: function() {},
+                    doc: function() { return { delete: function() {} }; }
+                };
+            }
+        };
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHLHG5-j7MuhC84OJ2tpek1LQzcEXlALQ",
+            authDomain: "gen-lang-client-0050440644.firebaseapp.com",
+            projectId: "gen-lang-client-0050440644",
+            storageBucket: "gen-lang-client-0050440644.firebasestorage.app",
+            messagingSenderId: "1034702972635",
+            appId: "1:1034702972635:web:39526491166a162a390efe"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app, "ai-studio-aa001173-fcb7-488a-a5a0-91f0d5148a31");
+
+        window.db = {
+            collection: (path) => ({
+                onSnapshot: (callback) => {
+                    onSnapshot(collection(db, path), (snapshot) => {
+                        const docs = snapshot.docs.map(d => ({
+                            id: d.id,
+                            data: () => d.data()
+                        }));
+                        callback({ docs });
+                    });
+                },
+                add: (data) => addDoc(collection(db, path), data),
+                doc: (id) => ({
+                    delete: () => deleteDoc(doc(db, path, id))
+                })
+            })
+        };
+
+        window.db.collection('studyMaterials').onSnapshot(snapshot => {
+            window.studyMaterials = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            if (typeof window.renderFrontendMaterials === 'function') window.renderFrontendMaterials();
+            if (typeof window.renderStudyMaterialsAdmin === 'function') window.renderStudyMaterialsAdmin();
+        });
+    </script>
+    <script>
+    if (typeof showHotoopiaSection !== 'function') {
+        function showHotoopiaSection(id) {
+            // 1. Hide the 3 main views + Admin CRM
+            ['home-page', 'study-material-list', 'paid-courses-page', 'admin-crm'].forEach(sectionId => {
+                const el = document.getElementById(sectionId);
+                if(el) el.style.display = 'none';
+            });
+
+            // 2. Show the selected one
+            const target = document.getElementById(id);
+            if(target) target.style.display = (id === 'admin-crm') ? 'flex' : 'block';
+            
+            if (id === 'home-page') {
+                document.body.style.overflow = 'auto';
+            } else {
+                document.body.style.overflow = 'hidden';
+            }
+
+            // 3. Handle main header and footer visibility
+            const mainHeader = document.querySelector('header');
+            const mainFooter = document.querySelector('footer');
+            const mainBackBtn = document.getElementById('main-back-btn');
+
+            if (mainHeader) {
+                mainHeader.style.display = (id === 'home-page') ? 'flex' : 'none';
+            }
+            if (mainFooter) {
+                mainFooter.style.display = (id === 'home-page') ? 'block' : 'none';
+            }
+            if (mainBackBtn) {
+                mainBackBtn.style.display = (id === 'home-page') ? 'none' : 'inline-flex';
+            }
+            
+            // 4. Handle body overflow
+            document.body.style.overflow = (id === 'home-page') ? 'auto' : 'hidden';
+            
+            // Scroll to top when switching sections
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 5. Close the Sidebar
+            const sidebar = document.getElementById('main-sidebar'); 
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            if(sidebar) sidebar.classList.remove('open');
+            if(sidebarOverlay) sidebarOverlay.classList.remove('open');
+        }
+    }
+
+        // 1. Disney Starfield Generation
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            starfield.appendChild(star);
+        }
+
+        // 2. Cinematic Intro
+        const eyes = document.getElementById('intro-eyes');
+        const sparkles = document.querySelectorAll('.eye-sparkle');
+        
+        setTimeout(() => eyes.style.transform = 'scaleY(1)', 400);
+        setTimeout(() => eyes.style.transform = 'scaleY(0.1)', 600);
+        setTimeout(() => eyes.style.transform = 'scaleY(1)', 800);
+        setTimeout(() => eyes.style.transform = 'scaleY(0.1)', 1000);
+        
+        setTimeout(() => {
+            eyes.style.transform = 'scaleY(1.1)';
+            sparkles.forEach(s => s.style.animation = 'popSparkle 0.6s forwards');
+            
+            const container = document.getElementById('glitter-container');
+            const colors = ['#F59E0B', '#E2E8F0', '#BEE3F8'];
+            
+            for(let i = 0; i < 150; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'glitter-particle';
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = color;
+                particle.style.boxShadow = `0 0 8px ${color}, 0 0 12px #fff`;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 500 + 50;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.animationDelay = `${Math.random() * 0.2}s`;
+                
+                container.appendChild(particle);
+            }
+
+            setTimeout(() => {
+                const overlay = document.getElementById('intro-overlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 1000);
+            }, 1500);
+
+        }, 1300);
+
+        // 3. Flapping Owl Cursor & Glitter Trail Logic
+        const cursor = document.getElementById('owl-cursor');
+        const toggleBtn = document.getElementById('cursor-toggle');
+        
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let cursorX = mouseX;
+        let cursorY = mouseY;
+        let velX = 0;
+        let velY = 0;
+        
+        // Spring Physics parameters
+        const spring = 0.15;
+        const friction = 0.75;
+        
+        let lastTrailTime = 0;
+        let isCursorEnabled = true;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function spawnTrail(x, y) {
+            const star = document.createElement('div');
+            star.className = 'trail-star';
+            // Offset to spawn near the tail/bottom of the owl
+            star.style.left = `${x + (Math.random() * 16 - 8)}px`;
+            star.style.top = `${y + 10 + (Math.random() * 16 - 8)}px`;
+            
+            // Randomly pick Gold or Light Blue
+            const colors = ['#F59E0B', '#BEE3F8'];
+            star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            document.body.appendChild(star);
+            
+            // Clean up after animation finishes (0.8s)
+            setTimeout(() => star.remove(), 800);
+        }
+
+        function animateCursor() {
+            if (!isCursorEnabled) return;
+
+            // Spring physics calculation
+            let dx = mouseX - cursorX;
+            let dy = mouseY - cursorY;
+            velX += dx * spring;
+            velY += dy * spring;
+            velX *= friction;
+            velY *= friction;
+            cursorX += velX;
+            cursorY += velY;
+
+            // Apply position (offset by -20px to center the 40x40 owl)
+            cursor.style.transform = `translate(${cursorX - 20}px, ${cursorY - 20}px)`;
+
+            // Flapping and Trail logic based on velocity
+            if (Math.abs(velX) > 1 || Math.abs(velY) > 1) {
+                cursor.classList.add('is-moving');
+                
+                // Spawn trail particles every ~40ms while moving
+                if (Date.now() - lastTrailTime > 40) {
+                    spawnTrail(cursorX, cursorY);
+                    lastTrailTime = Date.now();
+                }
+            } else {
+                cursor.classList.remove('is-moving');
+            }
+
+            requestAnimationFrame(animateCursor);
+        }
+        
+        // Start animation loop
+        animateCursor();
+
+        // 4. Hover Effects (Happy Bounce / Spin)
+        function attachHoverListeners() {
+            document.querySelectorAll('a, button').forEach(el => {
+                if (!el.dataset.cursorHoverAttached) {
+                    el.addEventListener('mouseenter', () => {
+                        if(isCursorEnabled) {
+                            cursor.classList.add('cursor-hover');
+                            // Remove class after animation (0.5s) so it can trigger again next time
+                            setTimeout(() => cursor.classList.remove('cursor-hover'), 500);
+                        }
+                    });
+                    el.dataset.cursorHoverAttached = 'true';
+                }
+            });
+        }
+        attachHoverListeners();
+
+        // 5. Sidebar Logic & Cursor Overlap Prevention
+        const sidebar = document.getElementById('main-sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const menuBtn = document.getElementById('menu-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            // Hide custom cursor to prevent overlap
+            cursor.style.opacity = '0';
+            document.body.style.cursor = 'auto';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            // Restore custom cursor if enabled
+            if (isCursorEnabled) {
+                cursor.style.opacity = '1';
+                document.body.style.cursor = 'none';
+            }
+        }
+
+        menuBtn.addEventListener('click', openSidebar);
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // 6. Admin Panel & CRM Logic
+        const adminSecretLink = document.querySelector('.admin-secret-link');
+        const adminLoginModal = document.getElementById('admin-login-modal');
+        const adminPasswordInput = document.getElementById('admin-password');
+        const adminLoginSubmit = document.getElementById('admin-login-submit');
+        const adminLoginCancel = document.getElementById('admin-login-cancel');
+        const adminCrm = document.getElementById('admin-crm');
+        const adminLogoutBtn = document.getElementById('admin-logout-btn');
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = type === 'success' ? `✓ ${message}` : `✕ ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        adminSecretLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeSidebar();
+            adminLoginModal.style.display = 'flex';
+        });
+
+        adminLoginCancel.addEventListener('click', () => {
+            adminLoginModal.style.display = 'none';
+            adminPasswordInput.value = '';
+        });
+
+        adminLoginSubmit.addEventListener('click', () => {
+            if (adminPasswordInput.value === 'ankush3211') {
+                adminLoginModal.style.display = 'none';
+                adminPasswordInput.value = '';
+                document.body.style.overflow = 'hidden'; // Prevent main page scrolling
+                showHotoopiaSection('admin-crm');
+                showToast('Welcome to Hotoopia Brain, Admin.');
+            } else {
+                showToast('Incorrect Password!', 'error');
+            }
+        });
+
+        adminLogoutBtn.addEventListener('click', () => {
+            showHotoopiaSection('home-page');
+            document.body.style.overflow = '';
+            showToast('Signed out successfully.');
+        });
+
+        // Admin Tabs Logic
+        const adminSidebarBtns = document.querySelectorAll('.admin-sidebar-btn[data-target]');
+        const adminPanels = document.querySelectorAll('.admin-panel');
+
+        adminSidebarBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                adminSidebarBtns.forEach(b => b.classList.remove('active'));
+                adminPanels.forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.target).classList.add('active');
+            });
+        });
+
+        // Home Page Settings Sync Logic
+        const welcomeTitleEl = document.querySelector('.welcome-title');
+        const welcomeSubtextEl = document.querySelector('#home-page > p');
+        const noticeBoxTitleEl = document.querySelector('.notice-title');
+        const noticeBoxContentEl = document.querySelector('.notice-content');
+
+        const welcomeTitleAdmin = document.getElementById('welcome-title-admin');
+        const welcomeSubtextAdmin = document.getElementById('welcome-subtext-admin');
+        const noticeTitleAdmin = document.getElementById('notice-title-admin');
+        const noticeBoxAdmin = document.getElementById('notice-box-admin');
+        const pushHomepageBtn = document.getElementById('push-homepage-btn');
+
+        // Load initial settings from localStorage if exists
+        const savedHomepageSettings = JSON.parse(localStorage.getItem('hotoopia_homepage_settings')) || {};
+        
+        // Apply saved or default values
+        if (savedHomepageSettings.welcomeTitle) welcomeTitleEl.innerText = savedHomepageSettings.welcomeTitle;
+        if (savedHomepageSettings.welcomeSubtext) welcomeSubtextEl.innerText = savedHomepageSettings.welcomeSubtext;
+        if (savedHomepageSettings.noticeTitle) noticeBoxTitleEl.innerText = savedHomepageSettings.noticeTitle;
+        
+        // Notice content has its own legacy key for backward compatibility
+        const savedNotice = localStorage.getItem('hotoopia_notices');
+        if (savedNotice) {
+            noticeBoxContentEl.innerText = savedNotice;
+        }
+
+        // Populate admin fields
+        welcomeTitleAdmin.value = welcomeTitleEl.innerText;
+        welcomeSubtextAdmin.value = welcomeSubtextEl.innerText;
+        noticeTitleAdmin.value = noticeBoxTitleEl.innerText;
+        noticeBoxAdmin.value = noticeBoxContentEl.innerText;
+
+        pushHomepageBtn.addEventListener('click', () => {
+            const newSettings = {
+                welcomeTitle: welcomeTitleAdmin.value,
+                welcomeSubtext: welcomeSubtextAdmin.value,
+                noticeTitle: noticeTitleAdmin.value
+            };
+            
+            // Update DOM
+            welcomeTitleEl.innerText = newSettings.welcomeTitle;
+            welcomeSubtextEl.innerText = newSettings.welcomeSubtext;
+            noticeBoxTitleEl.innerText = newSettings.noticeTitle;
+            noticeBoxContentEl.innerText = noticeBoxAdmin.value;
+
+            // Save to localStorage
+            localStorage.setItem('hotoopia_homepage_settings', JSON.stringify(newSettings));
+            localStorage.setItem('hotoopia_notices', noticeBoxAdmin.value); // Keep legacy key
+            
+            showToast('Home Page updated successfully! ✨');
+        });
+
+        // --- Study Materials & Paid Courses Logic ---
+        const smBtnAdd = document.getElementById('sm-btn-add');
+        const smListAdmin = document.getElementById('study-material-list-admin');
+        
+        const smClass = document.getElementById('sm-class');
+        const smStream = document.getElementById('sm-stream');
+        const smSubject = document.getElementById('sm-subject');
+        const smCustomSubject = document.getElementById('sm-custom-subject');
+        const smType = document.getElementById('sm-type');
+        const smCustomType = document.getElementById('sm-custom-type');
+
+        const subjectsData = {
+            'middle': ['Mathematics', 'Science', 'English', 'Social Science', 'Hindi', 'Sanskrit', 'Computer Science'],
+            'high': ['Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Political Science', 'Economics', 'Mathematics', 'English', 'Hindi', 'Computer Science'],
+            'Science': ['Physics', 'Chemistry', 'Mathematics', 'Biology', 'Computer Science', 'English', 'Physical Education'],
+            'Commerce': ['Accountancy', 'Business Studies', 'Economics', 'Mathematics', 'English', 'Information Practices'],
+            'Arts': ['History', 'Geography', 'Political Science', 'Economics', 'Sociology', 'Psychology', 'English', 'Hindi']
+        };
+
+        function updateSubjects() {
+            const cls = parseInt(smClass.value);
+            const stream = smStream.value;
+            let availableSubjects = [];
+
+            if (cls >= 5 && cls <= 8) {
+                availableSubjects = subjectsData['middle'];
+                smStream.style.display = 'none';
+                smStream.value = '';
+            } else if (cls === 9 || cls === 10) {
+                availableSubjects = subjectsData['high'];
+                smStream.style.display = 'none';
+                smStream.value = '';
+            } else if (cls === 11 || cls === 12) {
+                smStream.style.display = 'block';
+                if (stream) {
+                    availableSubjects = subjectsData[stream] || [];
+                }
+            } else {
+                smStream.style.display = 'none';
+            }
+
+            smSubject.innerHTML = '<option value="">Select Subject</option>';
+            availableSubjects.forEach(sub => {
+                smSubject.innerHTML += `<option value="${sub}">${sub}</option>`;
+            });
+            smSubject.innerHTML += '<option value="Other">Add Custom Subject...</option>';
+            
+            smCustomSubject.style.display = 'none';
+            smCustomSubject.value = '';
+        }
+
+        smClass.addEventListener('change', updateSubjects);
+        smStream.addEventListener('change', updateSubjects);
+
+        smSubject.addEventListener('change', (e) => {
+            if (e.target.value === 'Other') {
+                smCustomSubject.style.display = 'block';
+                smCustomSubject.focus();
+            } else {
+                smCustomSubject.style.display = 'none';
+                smCustomSubject.value = '';
+            }
+        });
+
+        smType.addEventListener('change', (e) => {
+            if (e.target.value === 'Other') {
+                smCustomType.style.display = 'block';
+                smCustomType.focus();
+            } else {
+                smCustomType.style.display = 'none';
+                smCustomType.value = '';
+            }
+        });
+
+        // let studyMaterials = JSON.parse(localStorage.getItem('hotoopia_study_materials')) || [];
+        
+        function renderStudyMaterialsAdmin() {
+            smListAdmin.innerHTML = '';
+            studyMaterials.forEach((mat, index) => {
+                const div = document.createElement('div');
+                div.className = 'admin-list-item';
+                div.innerHTML = `
+                    <div>
+                        <strong style="color: var(--gold);">${mat.name}</strong> 
+                        <span style="color: var(--bg-deepest); font-size: 0.85rem; background: var(--gold); padding: 2px 8px; border-radius: 12px; margin-left: 8px; font-weight: bold;">${mat.type}</span>
+                        <br>
+                        <span style="color: var(--text-muted); font-size: 0.9rem;">Class ${mat.class} | ${mat.board} ${mat.stream ? '| ' + mat.stream : ''} | <span style="color: var(--accent-blue);">${mat.subject}</span></span>
+                    </div>
+                    <button class="btn-remove" onclick="removeStudyMaterial('${mat.id}')">Remove</button>
+                `;
+                smListAdmin.appendChild(div);
+            });
+        }
+        
+        window.removeStudyMaterial = function(id) {
+            db.collection('studyMaterials').doc(id).delete()
+                .then(() => {
+                    showToast('Material removed.', 'info');
+                })
+                .catch(err => {
+                    console.error(err);
+                    showToast('Error removing material.', 'error');
+                });
+        };
+        
+        smBtnAdd.addEventListener('click', () => {
+            const matClass = smClass.value;
+            const board = document.getElementById('sm-board').value;
+            const stream = smStream.value;
+            
+            let subject = smSubject.value;
+            if (subject === 'Other') subject = smCustomSubject.value.trim();
+            
+            let type = smType.value;
+            if (type === 'Other') type = smCustomType.value.trim();
+            
+            const name = document.getElementById('sm-name').value.trim();
+            const link = document.getElementById('sm-link').value.trim();
+            const thumb = document.getElementById('sm-thumb').value.trim();
+            
+            if(!matClass || !board || !subject || !type || !name || !link) {
+                showToast('Please fill all required fields', 'error');
+                return;
+            }
+
+            if (!link.startsWith('http://') && !link.startsWith('https://')) {
+                showToast('Link must be a valid URL starting with http:// or https://', 'error');
+                return;
+            }
+            
+            db.collection('studyMaterials').add({
+                class: matClass,
+                board,
+                stream,
+                subject,
+                type,
+                name,
+                link,
+                thumb
+            }).then(() => {
+                showToast('Study Material Added! ✨', 'success');
+                document.getElementById('sm-name').value = '';
+                document.getElementById('sm-link').value = '';
+                document.getElementById('sm-thumb').value = '';
+                smSubject.value = '';
+                smCustomSubject.style.display = 'none';
+                smCustomSubject.value = '';
+            }).catch(err => {
+                console.error(err);
+                showToast('Error adding material.', 'error');
+            });
+            smType.value = '';
+            smCustomType.style.display = 'none';
+            smCustomType.value = '';
+        });
+        
+        const pcBtnAdd = document.getElementById('pc-btn-add');
+        const pcListAdmin = document.getElementById('paid-courses-list-admin');
+        const pcThumbFile = document.getElementById('pc-thumb-file');
+        const pcThumbUploadBtn = document.getElementById('pc-thumb-upload-btn');
+        const pcThumbPreview = document.getElementById('pc-thumb-preview');
+        const pcThumbPreviewImg = pcThumbPreview.querySelector('img');
+        
+        let currentThumbBase64 = '';
+        
+        pcThumbUploadBtn.addEventListener('click', () => pcThumbFile.click());
+        
+        pcThumbFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    currentThumbBase64 = event.target.result;
+                    pcThumbPreviewImg.src = currentThumbBase64;
+                    pcThumbPreview.style.display = 'block';
+                    pcThumbUploadBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Change Thumbnail
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        let paidCourses = JSON.parse(localStorage.getItem('hotoopia_paid_courses')) || [];
+        
+        function renderPaidCoursesAdmin() {
+            pcListAdmin.innerHTML = '';
+            paidCourses.forEach((course, index) => {
+                const div = document.createElement('div');
+                div.className = 'admin-list-item';
+                div.innerHTML = `
+                    <div>
+                        <strong style="color: var(--accent-blue);">${course.name}</strong> 
+                        <span style="color: var(--success); font-weight: bold;"> | ₹${course.price}</span>
+                        ${course.verified ? '<span style="color: var(--success); font-size: 0.8rem; margin-left: 10px;">✓ Verified</span>' : ''}
+                    </div>
+                    <button class="btn-remove" onclick="removePaidCourse(${index})">Remove</button>
+                `;
+                pcListAdmin.appendChild(div);
+            });
+        }
+        
+        window.removePaidCourse = function(index) {
+            paidCourses.splice(index, 1);
+            localStorage.setItem('hotoopia_paid_courses', JSON.stringify(paidCourses));
+            renderPaidCoursesAdmin();
+            showToast('Course removed.', 'info');
+        };
+        
+        pcBtnAdd.addEventListener('click', () => {
+            const name = document.getElementById('pc-name').value.trim();
+            const category = document.getElementById('pc-category').value;
+            const price = document.getElementById('pc-price').value.trim();
+            const duration = document.getElementById('pc-duration').value.trim();
+            const language = document.getElementById('pc-language').value.trim();
+            const link = document.getElementById('pc-link').value.trim();
+            const highlights = document.getElementById('pc-highlights').value.trim();
+            const isPopular = document.getElementById('pc-is-popular').checked;
+            const verified = document.getElementById('pc-verified').checked;
+            
+            if(!name || !category || !price || !link) {
+                showToast('Please fill required fields (Name, Category, Price, Link)', 'error');
+                return;
+            }
+
+            if (isNaN(price) || Number(price) < 0) {
+                showToast('Price must be a valid positive number', 'error');
+                return;
+            }
+
+            if (!link.startsWith('http://') && !link.startsWith('https://')) {
+                showToast('Link must be a valid URL starting with http:// or https://', 'error');
+                return;
+            }
+            
+            const highReviews = [
+                { rating: 5.0, text: "Excellent content, highly recommended!" },
+                { rating: 4.9, text: "Best course for board exams!" },
+                { rating: 5.0, text: "Hotoopia never fails to impress. Great course!" },
+                { rating: 4.8, text: "Very detailed and easy to understand." },
+                { rating: 5.0, text: "A must-buy for every student!" }
+            ];
+            const randomReview = highReviews[Math.floor(Math.random() * highReviews.length)];
+
+            paidCourses.push({
+                id: Date.now(),
+                name,
+                category,
+                price,
+                duration: duration || 'Self-Paced',
+                language: language || 'Hindi/English',
+                link,
+                thumb: currentThumbBase64,
+                highlights: highlights ? highlights.split(',').map(h => h.trim()) : [],
+                isPopular,
+                verified,
+                review: randomReview
+            });
+            
+            localStorage.setItem('hotoopia_paid_courses', JSON.stringify(paidCourses));
+            renderPaidCoursesFrontend(); // Sync to frontend immediately
+            renderPaidCoursesAdmin();
+            showToast('Paid Course Added! ✨', 'success');
+            
+            document.getElementById('pc-name').value = '';
+            document.getElementById('pc-category').value = '';
+            document.getElementById('pc-price').value = '';
+            document.getElementById('pc-duration').value = '';
+            document.getElementById('pc-language').value = '';
+            document.getElementById('pc-link').value = '';
+            document.getElementById('pc-highlights').value = '';
+            document.getElementById('pc-is-popular').checked = false;
+            document.getElementById('pc-verified').checked = true;
+            currentThumbBase64 = '';
+            pcThumbPreview.style.display = 'none';
+            pcThumbPreviewImg.src = '';
+            pcThumbUploadBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                Upload Thumbnail (Optional)
+            `;
+        });
+        
+        // Initial renders
+        renderStudyMaterialsAdmin();
+        renderPaidCoursesAdmin();
+
+        // 7. Cursor Toggle Logic
+        toggleBtn.addEventListener('click', () => {
+            isCursorEnabled = !isCursorEnabled;
+            if (isCursorEnabled) {
+                document.body.style.cursor = 'none';
+                cursor.style.display = 'block';
+                toggleBtn.textContent = 'Cursor: ON';
+                // Reset position to current mouse to avoid flying across screen
+                cursorX = mouseX;
+                cursorY = mouseY;
+                velX = 0; velY = 0;
+                animateCursor();
+            } else {
+                document.body.style.cursor = 'auto';
+                cursor.style.display = 'none';
+                toggleBtn.textContent = 'Cursor: OFF';
+            }
+        });
+        // 8. Study Materials Frontend Logic
+        const navStudyMaterials = document.getElementById('nav-study-materials');
+        const smListFace = document.getElementById('study-material-list');
+        const mainBackBtn = document.getElementById('main-back-btn');
+        
+        // Student Auth Engine
+        if (!window.hotoopiaUser) {
+            window.hotoopiaUser = JSON.parse(localStorage.getItem('hotoopia_session')) || null;
+        }
+
+        let isStudentLoggedIn = !!window.hotoopiaUser;
+        const userAuthBtn = document.getElementById('user-auth-btn');
+
+        function updateHeaderProfile() {
+            if (isStudentLoggedIn && window.hotoopiaUser) {
+                const firstName = window.hotoopiaUser.name.split(' ')[0];
+                userAuthBtn.outerHTML = `
+                    <div class="profile-container" id="user-profile-widget">
+                        <img src="${window.hotoopiaUser.picture}" alt="Profile" class="profile-pic">
+                        <span class="profile-name">Hi, ${firstName} ✨</span>
+                        <div class="hotoopian-badge" title="Hotoopian Badge">
+                            <svg viewBox="0 0 120 120" width="18" height="18">
+                                <rect x="25" y="40" width="70" height="70" rx="35" fill="#2B9FE6" />
+                                <circle cx="42" cy="55" r="14" fill="#FFF" />
+                                <circle cx="78" cy="55" r="14" fill="#FFF" />
+                                <circle cx="45" cy="55" r="7" fill="#000" />
+                                <circle cx="75" cy="55" r="7" fill="#000" />
+                                <path d="M 55 62 L 65 62 L 60 70 Z" fill="#F5A623" />
+                            </svg>
+                        </div>
+                    </div>
+                `;
+                
+                // Add logout listener to the new profile widget
+                const profileWidget = document.getElementById('user-profile-widget');
+                if (profileWidget) {
+                    profileWidget.addEventListener('click', () => {
+                        if (confirm('Do you want to logout?')) {
+                            logoutStudent();
+                        }
+                    });
+                }
+            } else {
+                // If the widget exists, replace it back with the login button
+                const profileWidget = document.getElementById('user-profile-widget');
+                if (profileWidget) {
+                    const loginBtn = document.createElement('button');
+                    loginBtn.className = 'magic-btn';
+                    loginBtn.id = 'user-auth-btn';
+                    loginBtn.innerText = 'Google Login';
+                    profileWidget.replaceWith(loginBtn);
+                    
+                    // Re-attach listener to the new login button
+                    loginBtn.addEventListener('click', loginStudent);
+                }
+            }
+        }
+
+        function loginStudent() {
+            // Mock Google Login Data
+            const mockUser = {
+                name: 'Rahul Sharma',
+                email: 'rahul@example.com',
+                picture: 'https://picsum.photos/seed/rahul/100/100'
+            };
+            
+            window.hotoopiaUser = mockUser;
+            localStorage.setItem('hotoopia_session', JSON.stringify(mockUser));
+            isStudentLoggedIn = true;
+            
+            updateHeaderProfile();
+            showToast('Logged in successfully! ✨', 'success');
+            renderFrontendMaterials();
+        }
+
+        function logoutStudent() {
+            window.hotoopiaUser = null;
+            localStorage.removeItem('hotoopia_session');
+            isStudentLoggedIn = false;
+            
+            updateHeaderProfile();
+            showToast('Logged out successfully.', 'info');
+            renderFrontendMaterials();
+        }
+
+        // Initial Header State
+        if (isStudentLoggedIn) {
+            updateHeaderProfile();
+        } else {
+            userAuthBtn.addEventListener('click', loginStudent);
+        }
+
+        navStudyMaterials.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHotoopiaSection('study-material-list');
+            initFilters();
+            renderFrontendMaterials();
+        });
+
+        // 9. Paid Courses Frontend Logic
+        const navPaidCourses = document.getElementById('nav-paid-courses');
+        const pcContainer = document.getElementById('paid-courses-page');
+        const courseGrid = document.getElementById('course-grid');
+        const pcEmptyState = document.getElementById('pc-empty-state');
+        const pcReviewsSection = document.getElementById('pc-reviews-section');
+        const pcReviewsSlider = document.getElementById('pc-reviews-slider');
+
+        navPaidCourses.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHotoopiaSection('paid-courses-page');
+            renderPaidCoursesFrontend();
+        });
+
+        window.closePaidCourses = function() {
+            document.body.classList.add('fade-out-transition');
+            setTimeout(() => {
+                pcContainer.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('fade-out-transition');
+            }, 300);
+        };
+
+        let currentPaidCategory = 'all';
+
+        function renderPaidCoursesFrontend() {
+            const allCourses = JSON.parse(localStorage.getItem('hotoopia_paid_courses')) || [];
+            const courses = currentPaidCategory === 'all' 
+                ? allCourses 
+                : allCourses.filter(c => c.category === currentPaidCategory);
+
+            const countBadge = document.getElementById('pc-count-badge');
+            if (countBadge) {
+                countBadge.textContent = `${courses.length} Course${courses.length !== 1 ? 's' : ''}`;
+            }
+
+            if (courses.length === 0) {
+                pcEmptyState.style.display = 'flex';
+                courseGrid.style.display = 'none';
+                pcReviewsSection.style.display = 'none';
+            } else {
+                pcEmptyState.style.display = 'none';
+                courseGrid.style.display = 'grid';
+                courseGrid.innerHTML = '';
+                
+                courses.forEach(course => {
+                    const card = document.createElement('div');
+                    card.className = `course-card ${course.isPopular ? 'popular-card' : ''}`;
+                    card.innerHTML = `
+                        ${course.isPopular ? `
+                        <div class="popular-badge">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            Popular
+                        </div>
+                        ` : ''}
+                        ${course.verified ? `
+                        <div class="razorpay-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Razorpay Verified
+                        </div>
+                        ` : ''}
+                        <img src="${course.thumb || 'https://picsum.photos/seed/hotoopia/400/200'}" alt="${course.name}" class="course-thumb" onerror="this.src='https://picsum.photos/seed/hotoopia/400/200'">
+                        <div class="course-info">
+                            <span class="course-category-tag">${course.category || 'Course'}</span>
+                            <h3 class="course-title">${course.name}</h3>
+                            <div style="display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.85rem; color: var(--text-muted);">
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    ${course.duration || 'Self-Paced'}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                    ${course.language || 'Hindi/English'}
+                                </div>
+                            </div>
+                            
+                            ${course.highlights && course.highlights.length > 0 ? `
+                            <ul class="course-highlights">
+                                ${course.highlights.map(h => `<li>${h}</li>`).join('')}
+                            </ul>
+                            ` : ''}
+
+                            ${course.review ? `
+                            <div style="background: rgba(43, 159, 230, 0.1); border-radius: 8px; padding: 10px; margin-bottom: 15px; border: 1px dashed var(--accent-blue);">
+                                <div style="display: flex; align-items: center; gap: 5px; color: var(--gold); font-weight: bold; font-size: 0.85rem; margin-bottom: 4px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                    ${course.review.rating} Rating
+                                </div>
+                                <p style="font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin: 0;">"${course.review.text}"</p>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="course-meta">
+                                <div class="course-price">₹${course.price}</div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn-copy" onclick="copyToClipboard('${course.link}')" title="Copy Link">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-share" onclick="shareCourse('${course.name}', '${course.link}')" title="Share on WhatsApp">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn-enroll" onclick="window.open('${course.link}', '_blank')">Buy Now</button>
+                        </div>
+                    `;
+                    courseGrid.appendChild(card);
+                });
+
+                pcReviewsSection.style.display = 'none';
+            }
+        }
+
+        // Add filter event listeners
+        document.querySelectorAll('.pc-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pc-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentPaidCategory = btn.dataset.category;
+                renderPaidCoursesFrontend();
+            });
+        });
+
+        window.shareCourse = function(name, link) {
+            const text = `Check out this awesome course on Hotoopia: ${name}\n${link}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+            window.open(whatsappUrl, '_blank');
+        };
+
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Link copied to clipboard! ✨', 'success');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Failed to copy link', 'error');
+            });
+        };
+
+        mainBackBtn.addEventListener('click', () => {
+            // Fade out effect
+            document.body.classList.add('fade-out-transition');
+            setTimeout(() => {
+                showHotoopiaSection('home-page');
+                document.body.classList.remove('fade-out-transition');
+            }, 300);
+        });
+
+        // Logo click to go home
+        const homeLink = document.querySelector('.logo');
+        homeLink.style.cursor = 'pointer';
+        homeLink.addEventListener('click', () => {
+            mainBackBtn.click();
+        });
+
+        // Filters
+        const filterClass = document.getElementById('class-filter');
+        const filterBoard = document.getElementById('board-filter');
+        const filterStream = document.getElementById('stream-filter');
+        const filterSubject = document.getElementById('subject-filter');
+        const clearFiltersBtn = document.getElementById('clear-filters-btn');
+        const smResultsGrid = document.getElementById('sm-results-grid');
+        const smEmptyState = document.getElementById('sm-empty-state');
+        const flyingOwl = document.getElementById('flying-owl');
+
+        function initFilters() {
+            const cls = parseInt(filterClass.value);
+            const stream = filterStream.value;
+            let availableSubjects = [];
+
+            if (cls >= 5 && cls <= 8) {
+                availableSubjects = subjectsData['middle'] || [];
+                filterStream.style.display = 'none';
+                filterStream.value = '';
+            } else if (cls === 9 || cls === 10) {
+                availableSubjects = subjectsData['high'] || [];
+                filterStream.style.display = 'none';
+                filterStream.value = '';
+            } else if (cls === 11 || cls === 12) {
+                filterStream.style.display = 'block';
+                if (stream && stream !== 'N/A') {
+                    availableSubjects = subjectsData[stream] || [];
+                } else {
+                    // Show all subjects for 11-12 if no stream selected
+                    availableSubjects = [...new Set([...subjectsData['Science'], ...subjectsData['Commerce'], ...subjectsData['Arts']])].sort();
+                }
+            } else {
+                filterStream.style.display = 'none';
+                filterStream.value = '';
+                availableSubjects = [];
+            }
+
+            filterSubject.innerHTML = '<option value="">Select Subject</option>';
+            availableSubjects.forEach(sub => {
+                const opt = document.createElement('option');
+                opt.value = sub;
+                opt.textContent = sub;
+                filterSubject.appendChild(opt);
+            });
+            
+            // Add custom subjects from localStorage that match the current class/stream
+            const allMats = JSON.parse(localStorage.getItem('hotoopia_study_materials')) || [];
+            const customSubjects = new Set();
+            allMats.forEach(mat => {
+                const matClass = parseInt(mat.class);
+                if (matClass === cls && (!stream || stream === 'N/A' || mat.stream === stream) && !availableSubjects.includes(mat.subject)) {
+                    customSubjects.add(mat.subject);
+                }
+            });
+            customSubjects.forEach(sub => {
+                const opt = document.createElement('option');
+                opt.value = sub;
+                opt.textContent = sub;
+                filterSubject.appendChild(opt);
+            });
+        }
+
+        filterClass.addEventListener('change', () => {
+            initFilters();
+            triggerFlyingOwl();
+            setTimeout(renderFrontendMaterials, 400);
+        });
+        filterBoard.addEventListener('change', () => {
+            triggerFlyingOwl();
+            setTimeout(renderFrontendMaterials, 400);
+        });
+        filterStream.addEventListener('change', () => {
+            initFilters();
+            triggerFlyingOwl();
+            setTimeout(renderFrontendMaterials, 400);
+        });
+        filterSubject.addEventListener('change', () => {
+            triggerFlyingOwl();
+            setTimeout(renderFrontendMaterials, 400);
+        });
+
+        clearFiltersBtn.addEventListener('click', () => {
+            filterClass.value = '';
+            filterBoard.value = '';
+            filterStream.value = '';
+            filterStream.style.display = 'none';
+            filterSubject.innerHTML = '<option value="">Select Subject</option>';
+            triggerFlyingOwl();
+            setTimeout(renderFrontendMaterials, 400);
+            showToast('Filters cleared! ✨', 'info');
+        });
+
+        function triggerFlyingOwl() {
+            flyingOwl.classList.remove('fly-active');
+            void flyingOwl.offsetWidth; // trigger reflow
+            flyingOwl.classList.add('fly-active');
+            setTimeout(() => {
+                flyingOwl.classList.remove('fly-active');
+            }, 1200);
+        }
+
+        function renderFrontendMaterials() {
+            const allMats = studyMaterials;
+            const fClass = filterClass.value;
+            const fBoard = filterBoard.value;
+            const fStream = filterStream.value;
+            const fSubject = filterSubject.value;
+
+            const filtered = allMats.filter(mat => {
+                if (fClass && mat.class !== fClass) return false;
+                if (fBoard && mat.board !== fBoard) return false;
+                if (fStream && mat.stream !== fStream) return false;
+                if (fSubject && mat.subject !== fSubject) return false;
+                return true;
+            });
+
+            smResultsGrid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                smResultsGrid.style.display = 'none';
+                smEmptyState.style.display = 'flex';
+            } else {
+                smEmptyState.style.display = 'none';
+                smResultsGrid.style.display = 'grid';
+                
+                const standardTypes = ['Handwritten Notes', 'PYQs', 'Sample Papers', 'Mind Maps'];
+
+                filtered.forEach(mat => {
+                    const isSpecial = !standardTypes.includes(mat.type);
+                    const badgeHtml = isSpecial ? `<div class="sm-badge">Special Materials ✨</div>` : '';
+                    
+                    let btnHtml = isStudentLoggedIn 
+                        ? `<a href="${mat.link}" target="_blank" class="sm-btn-download">Download PDF ⬇️</a>`
+                        : `<button class="sm-btn-login" onclick="loginStudent()">Login to Download</button>`;
+
+                    if (isStudentLoggedIn && mat.link.includes('drive.google.com')) {
+                        btnHtml += `<button class="sm-btn-login" style="margin-top: 10px;" onclick="openPdfViewer('${mat.link}')">View PDF 👁️</button>`;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'sm-card';
+                    card.innerHTML = `
+                        ${badgeHtml}
+                        <h3 class="sm-card-title">${mat.name}</h3>
+                        <div class="sm-card-meta">
+                            <strong>Subject:</strong> ${mat.subject}<br>
+                            <strong>Type:</strong> ${mat.type}<br>
+                            <strong>Board:</strong> ${mat.board} | Class ${mat.class} ${mat.stream ? '| ' + mat.stream : ''}
+                        </div>
+                        ${btnHtml}
+                    `;
+                    smResultsGrid.appendChild(card);
+                });
+            }
+        }
+
+        // Event listeners handled in initFilters section above
+    </script>
+    <!-- PDF Viewer Modal -->
+    <div id="pdf-viewer-modal">
+        <div class="pdf-viewer-content">
+            <button class="pdf-viewer-close" onclick="closePdfViewer()">✕</button>
+            <iframe id="pdf-iframe"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openPdfViewer(url) {
+            const modal = document.getElementById('pdf-viewer-modal');
+            const iframe = document.getElementById('pdf-iframe');
+            
+            // Transform Google Drive URL if needed
+            let embedUrl = url;
+            if (url.includes('drive.google.com/file/d/')) {
+                embedUrl = url.replace('/view', '/preview');
+            }
+            
+            iframe.src = embedUrl;
+            modal.style.display = 'flex';
+        }
+        
+        function closePdfViewer() {
+            const modal = document.getElementById('pdf-viewer-modal');
+            const iframe = document.getElementById('pdf-iframe');
+            iframe.src = '';
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
